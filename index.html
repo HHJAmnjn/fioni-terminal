@@ -3,36 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>菲欧尼之心 (Heart of Fioni) · 私有量化巡航终端 v5.0</title>
+    <title>菲欧尼之心 (Heart of Fioni) · 私有量化巡航终端 v6.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
     <style>
-        body { background-color: #080b10; color: #d1d4dc; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", sans-serif; }
-        .card-bg { background-color: #11151f; border: 1px solid #1f2637; }
-        .card-hover:hover { border-color: #3b82f6; background-color: #161c2a; }
-        .card-active { border-color: #10b981 !important; background-color: #131c27 !important; }
-        .glow-emerald { box-shadow: 0 0 20px rgba(16, 185, 129, 0.12); }
-        .glow-blue { box-shadow: 0 0 20px rgba(59, 130, 246, 0.12); }
+        body { background-color: #06090e; color: #d1d4dc; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", sans-serif; }
+        .card-bg { background-color: #0f141d; border: 1px solid #1e2638; }
+        .card-hover:hover { border-color: #38bdf8; background-color: #141b29; }
+        .card-active { border-color: #10b981 !important; background-color: #111e27 !important; box-shadow: 0 0 12px rgba(16, 185, 129, 0.18); }
+        .glow-emerald { box-shadow: 0 0 22px rgba(16, 185, 129, 0.10); }
+        .glow-blue { box-shadow: 0 0 22px rgba(56, 189, 248, 0.10); }
         ::-webkit-scrollbar { width: 5px; height: 5px; }
-        ::-webkit-scrollbar-track { background: #0b0e14; }
+        ::-webkit-scrollbar-track { background: #080b10; }
         ::-webkit-scrollbar-thumb { background: #262f45; border-radius: 3px; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col select-none">
 
     <!-- ==================== 1. 科技感暗黑密码锁屏层 ==================== -->
-    <div id="auth-overlay" class="fixed inset-0 z-50 bg-[#06080c]/95 backdrop-blur-md flex items-center justify-center p-4">
+    <div id="auth-overlay" class="fixed inset-0 z-50 bg-[#05070b]/95 backdrop-blur-md flex items-center justify-center p-4">
         <div class="card-bg rounded-2xl p-8 max-w-md w-full border border-gray-800 shadow-2xl text-center space-y-5">
             <div class="w-14 h-14 mx-auto rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-2xl">
                 🔐
             </div>
             <div>
                 <h2 class="text-xl font-bold text-white tracking-wider">菲欧尼之心 · 私有量化终端</h2>
-                <p class="text-xs text-gray-400 mt-1">Fioni Core Spatial Matrix · 授权访问网关 v5.0</p>
+                <p class="text-xs text-gray-400 mt-1">Fioni Core Spatial Matrix · 授权访问网关 v6.0</p>
             </div>
             <div class="space-y-3">
                 <input id="pwd-input" type="password" placeholder="请输入终端访问授权码..." 
-                    class="w-full px-4 py-3 rounded-xl bg-[#0b0e14] border border-gray-700 text-white text-center text-sm focus:outline-none focus:border-emerald-500 transition"
+                    class="w-full px-4 py-3 rounded-xl bg-[#090d14] border border-gray-700 text-white text-center text-sm focus:outline-none focus:border-emerald-500 transition"
                     onkeydown="if(event.key==='Enter') verifyPassword()" />
                 <div id="pwd-error" class="text-xs text-red-400 hidden">❌ 授权密码错误，请核对后重试</div>
                 <button onclick="verifyPassword()" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm transition shadow-lg shadow-emerald-900/30">
@@ -44,22 +44,22 @@
     </div>
 
     <!-- ==================== 2. 顶部战略导航与双时区时钟 ==================== -->
-    <header class="card-bg border-b border-gray-800/80 px-4 lg:px-8 py-3.5 flex flex-wrap justify-between items-center gap-4 sticky top-0 z-30">
+    <header class="card-bg border-b border-gray-800/80 px-4 lg:px-8 py-3 flex flex-wrap justify-between items-center gap-4 sticky top-0 z-30">
         <div class="flex items-center space-x-3">
             <span class="relative flex h-3 w-3">
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
             </span>
-            <h1 class="text-lg font-bold tracking-wider text-white">菲欧尼之心 <span class="text-xs font-mono px-2 py-0.5 bg-emerald-950 text-emerald-400 rounded border border-emerald-800/60 ml-1">FIONI PRO v5.0</span></h1>
-            <span id="sync-status" class="text-[11px] px-2.5 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-800 font-mono">🔄 正在解算行情与三合一主图信号...</span>
+            <h1 class="text-lg font-bold tracking-wider text-white">菲欧尼之心 <span class="text-xs font-mono px-2 py-0.5 bg-emerald-950 text-emerald-400 rounded border border-emerald-800/60 ml-1">FIONI PRO v6.0</span></h1>
+            <span id="sync-status" class="text-[11px] px-2.5 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-800 font-mono">🔄 正在同步行情...</span>
             <button onclick="refreshLiveAll()" class="text-[11px] px-2.5 py-1 rounded bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 transition">🔄 刷新实时行情</button>
         </div>
 
         <div class="flex flex-wrap items-center gap-3 text-xs">
-            <div class="bg-[#0b0e14] px-3 py-1.5 rounded-lg border border-gray-800">
+            <div class="bg-[#090d14] px-3 py-1.5 rounded-lg border border-gray-800">
                 <span class="text-gray-400">北京时间:</span> <span id="bj-time" class="text-white font-mono font-semibold ml-1">--:--:--</span>
             </div>
-            <div class="bg-[#0b0e14] px-3 py-1.5 rounded-lg border border-gray-800">
+            <div class="bg-[#090d14] px-3 py-1.5 rounded-lg border border-gray-800">
                 <span class="text-gray-400">美东时间:</span> <span id="et-time" class="text-emerald-400 font-mono font-semibold ml-1">--:--:--</span>
             </div>
             <div id="session-badge" class="px-3 py-1.5 rounded-lg font-semibold bg-emerald-950/90 text-emerald-300 border border-emerald-700/60">
@@ -69,7 +69,7 @@
     </header>
 
     <!-- ==================== 3. 主体网格布局 ==================== -->
-    <main class="flex-1 p-4 lg:p-6 max-w-[1640px] w-full mx-auto space-y-5">
+    <main class="flex-1 p-4 lg:p-6 max-w-[1660px] w-full mx-auto space-y-5">
 
         <!-- 3.1 置顶一：三大跨板块共振与置顶 3X 决战台 -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
@@ -78,7 +78,7 @@
                     <h2 class="text-sm font-bold text-amber-400 flex items-center gap-1.5">
                         👑 【置顶一】3X 多空杠杆决战台 (SOXL / SOXS / TQQQ / SQQQ)
                     </h2>
-                    <span class="text-[11px] text-gray-400">点击卡片切换右侧 K 线与【真假突破/顶底针刺/流动性清扫】信号</span>
+                    <span class="text-[11px] text-gray-400">点击任意卡片即刻切换右侧山形图与关键防线</span>
                 </div>
                 <div id="pinned-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3"></div>
             </div>
@@ -98,12 +98,12 @@
                 <h2 class="text-sm font-bold text-sky-400 flex items-center gap-1.5">
                     🌐 【置顶二】核心大盘指数与期货总览台 (SOXX / QQQ / SPY / SPX标普500指数 / VOO / NQMAIN 2612纳指期货)
                 </h2>
-                <span class="text-[11px] text-gray-400">1倍指数母体与纳指100期货主连2612 · 点击任意卡片联动右侧画线K线</span>
+                <span class="text-[11px] text-gray-400">1倍指数母体与纳指100期货主连2612 · 点击任意卡片联动右侧山形图</span>
             </div>
             <div id="index-pinned-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3"></div>
         </div>
 
-        <!-- 3.3 中下部：左侧六大梯队看板 + 右侧带三合一指标 K 线终端 -->
+        <!-- 3.3 中下部：左侧六大梯队看板 + 右侧专业山形图终端 -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
             
             <!-- 左侧：六大梯队点位看板 (5 Cols) -->
@@ -114,81 +114,104 @@
                         <p class="text-[11px] text-gray-400 mt-0.5">含 SPX标普指数、VOO、NQMAIN 2612 及全板块核心池</p>
                     </div>
                     <input id="search-input" type="text" placeholder="搜索代码..." oninput="renderSectors()"
-                        class="px-2.5 py-1 text-xs rounded bg-[#0b0e14] border border-gray-700 text-white w-28 focus:outline-none focus:border-blue-500" />
+                        class="px-2.5 py-1 text-xs rounded bg-[#090d14] border border-gray-700 text-white w-28 focus:outline-none focus:border-blue-500" />
                 </div>
 
                 <div id="sector-tabs" class="flex gap-1.5 overflow-x-auto pb-2 mb-2 text-xs"></div>
                 <div id="sector-list" class="flex-1 overflow-y-auto space-y-2.5 pr-1"></div>
             </div>
 
-            <!-- 右侧：搭载三大麦语言主图指标的 K 线终端 + 手机零折行卡片生成器 (7 Cols) -->
+            <!-- 右侧：专业级山形图终端 + 极简 1/2/3 信号图层 + Discord 卡片舱 (7 Cols) -->
             <div class="lg:col-span-7 flex flex-col space-y-4 h-[780px]">
                 
-                <!-- K线主容器 -->
-                <div class="card-bg rounded-xl p-4 flex-1 flex flex-col">
-                    <!-- 顶部控制栏 -->
+                <!-- 图表主容器 -->
+                <div id="chart-card-container" class="card-bg rounded-xl p-4 flex-1 flex flex-col">
+                    <!-- 第一行：标题 + 快捷标的 + 周期切换 + 视图复位 -->
                     <div class="flex flex-wrap justify-between items-center gap-2 mb-2">
                         <div class="flex items-center space-x-2">
-                            <span class="text-base font-bold text-white" id="chart-title">📈 SOXL 量化画线 K 线终端</span>
+                            <span class="text-base font-bold text-white" id="chart-title">⛰️ SOXL 量化山形图终端</span>
                             <span id="chart-spot-badge" class="text-xs font-mono bg-emerald-950 text-emerald-300 border border-emerald-800 px-2 py-0.5 rounded font-bold">$--.--</span>
                             <span id="chart-sig-badge" class="text-xs bg-gray-800 text-amber-300 px-2 py-0.5 rounded">解算中</span>
                         </div>
-                        <div class="flex items-center gap-1.5 text-xs">
+                        <div class="flex flex-wrap items-center gap-1.5 text-xs">
                             <button onclick="selectTickerBySym('SOXL')" class="px-2 py-1 rounded bg-amber-600/20 text-amber-300 border border-amber-600/40 hover:bg-amber-600/30 transition font-semibold">SOXL</button>
                             <button onclick="selectTickerBySym('^GSPC')" class="px-2 py-1 rounded bg-sky-600/20 text-sky-300 border border-sky-600/40 hover:bg-sky-600/30 transition font-semibold">SPX</button>
                             <button onclick="selectTickerBySym('NQZ26.CME')" class="px-2 py-1 rounded bg-purple-600/20 text-purple-300 border border-purple-600/40 hover:bg-purple-600/30 transition font-semibold">NQ2612</button>
-                            <button id="btn-tf-15m" onclick="changeTimeframe('15m')" class="tf-btn px-2.5 py-1 rounded bg-gray-800 hover:bg-gray-700 text-gray-300">15m</button>
-                            <button id="btn-tf-1h" onclick="changeTimeframe('1h')" class="tf-btn px-2.5 py-1 rounded bg-blue-600 text-white font-semibold">1H</button>
-                            <button id="btn-tf-4h" onclick="changeTimeframe('4h')" class="tf-btn px-2.5 py-1 rounded bg-gray-800 hover:bg-gray-700 text-gray-300">4H</button>
-                            <button id="btn-tf-1d" onclick="changeTimeframe('1d')" class="tf-btn px-2.5 py-1 rounded bg-gray-800 hover:bg-gray-700 text-gray-300">日K</button>
+                            <span class="text-gray-700">|</span>
+                            <button id="btn-tf-15m" onclick="changeTimeframe('15m')" class="tf-btn px-2 py-1 rounded bg-gray-800 hover:bg-gray-700 text-gray-300">15m</button>
+                            <button id="btn-tf-1h" onclick="changeTimeframe('1h')" class="tf-btn px-2 py-1 rounded bg-gray-800 hover:bg-gray-700 text-gray-300">1H</button>
+                            <button id="btn-tf-4h" onclick="changeTimeframe('4h')" class="tf-btn px-2 py-1 rounded bg-blue-600 text-white font-semibold">4H</button>
+                            <button id="btn-tf-1d" onclick="changeTimeframe('1d')" class="tf-btn px-2 py-1 rounded bg-gray-800 hover:bg-gray-700 text-gray-300">日K</button>
+                            <span class="text-gray-700">|</span>
+                            <button id="btn-chart-mode" onclick="toggleChartStyle()" class="px-2 py-1 rounded bg-emerald-950 text-emerald-300 border border-emerald-800/70 hover:bg-emerald-900 transition" title="切换山形图/蜡烛图">⛰️ 山形图</button>
+                            <button onclick="resetChartZoom()" class="px-2 py-1 rounded bg-gray-800 hover:bg-gray-700 text-gray-300" title="自动缩放适配视图">⟲ 复位</button>
                         </div>
                     </div>
 
-                    <!-- 新增：三大主图叠加指标独立开关控制栏 -->
-                    <div class="flex flex-wrap items-center justify-between gap-2 mb-2 px-3 py-1.5 rounded-lg bg-[#0b0e14] border border-gray-800 text-[11px]">
-                        <div class="flex flex-wrap items-center gap-3">
-                            <span class="text-gray-400 font-semibold">🛠️ 主图指标图层开关:</span>
-                            <label class="flex items-center gap-1 cursor-pointer text-gray-200 hover:text-white">
+                    <!-- 第二行：保密级 1 / 2 / 3 信号开关栏 (完全隐去指标名称) -->
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-2 px-3 py-1.5 rounded-lg bg-[#090d14] border border-gray-800/90 text-xs">
+                        <div class="flex flex-wrap items-center gap-4">
+                            <span class="text-gray-400 font-semibold">🛠️ 信号图层:</span>
+                            <label class="flex items-center gap-1.5 cursor-pointer text-white font-mono font-bold bg-gray-800/80 px-2.5 py-0.5 rounded border border-gray-700 hover:border-emerald-500 transition">
                                 <input type="checkbox" id="chk-ind1" checked onchange="refreshIndicatorsOnly()" class="accent-emerald-500 rounded" />
-                                <span>① 量价真假突破 (<span class="text-red-400">▲</span>/<span class="text-emerald-400">▼</span>/<span class="text-amber-300">假</span> + 20周期红绿轨)</span>
+                                <span>1</span>
                             </label>
-                            <label class="flex items-center gap-1 cursor-pointer text-gray-200 hover:text-white">
+                            <label class="flex items-center gap-1.5 cursor-pointer text-white font-mono font-bold bg-gray-800/80 px-2.5 py-0.5 rounded border border-gray-700 hover:border-emerald-500 transition">
                                 <input type="checkbox" id="chk-ind2" checked onchange="refreshIndicatorsOnly()" class="accent-emerald-500 rounded" />
-                                <span>② 顶底针刺反转 (<span class="text-emerald-400">尖</span>/<span class="text-red-400">脚</span> + 极值防守线)</span>
+                                <span>2</span>
                             </label>
-                            <label class="flex items-center gap-1 cursor-pointer text-gray-200 hover:text-white">
+                            <label class="flex items-center gap-1.5 cursor-pointer text-white font-mono font-bold bg-gray-800/80 px-2.5 py-0.5 rounded border border-gray-700 hover:border-emerald-500 transition">
                                 <input type="checkbox" id="chk-ind3" checked onchange="refreshIndicatorsOnly()" class="accent-emerald-500 rounded" />
-                                <span>③ 流动性清扫 (<span class="text-emerald-400">呼</span>/<span class="text-red-400">吸</span> + 15周期流动性池)</span>
+                                <span>3</span>
                             </label>
+                            <span class="text-[11px] text-gray-400 hidden sm:inline">（仅保留 1 号强支撑/强压力实线轨）</span>
                         </div>
-                        <span id="ind-active-summary" class="text-emerald-400 font-mono">已触发信号: 扫描中</span>
+                        <span id="ind-active-summary" class="text-emerald-400 font-mono text-[11px]">信号统计: 1(0) | 2(0) | 3(0)</span>
                     </div>
 
-                    <!-- 图表上方实时点位图例栏 -->
-                    <div class="grid grid-cols-4 gap-2 mb-2 bg-[#0b0e14] p-2 rounded-lg border border-gray-800/90 text-xs font-mono">
-                        <div class="flex items-center justify-between px-2 border-r border-gray-800">
-                            <span class="text-gray-400">● 实时现价:</span>
+                    <!-- 第三行：图表上方实时点位图例栏 -->
+                    <div class="grid grid-cols-2 sm:grid-cols-6 gap-1.5 mb-2 bg-[#090d14] p-2 rounded-lg border border-gray-800/90 text-[11px] font-mono">
+                        <div class="flex items-center justify-between px-1.5 border-r border-gray-800">
+                            <span class="text-gray-400">现价:</span>
                             <span id="legend-spot" class="text-white font-bold">$--</span>
                         </div>
-                        <div class="flex items-center justify-between px-2 border-r border-gray-800">
-                            <span class="text-red-400">━ 1H压力位:</span>
-                            <span id="legend-res" class="text-red-400 font-bold">$--</span>
+                        <div class="flex items-center justify-between px-1.5 border-r border-gray-800">
+                            <span class="text-red-400">强压轨:</span>
+                            <span id="legend-hhv20" class="text-red-400 font-bold">$--</span>
                         </div>
-                        <div class="flex items-center justify-between px-2 border-r border-gray-800">
-                            <span class="text-sky-400">━ 1H支撑位:</span>
+                        <div class="flex items-center justify-between px-1.5 border-r border-gray-800">
+                            <span class="text-green-400">强撑轨:</span>
+                            <span id="legend-llv20" class="text-green-400 font-bold">$--</span>
+                        </div>
+                        <div class="flex items-center justify-between px-1.5 border-r border-gray-800">
+                            <span class="text-rose-400">1H压:</span>
+                            <span id="legend-res" class="text-rose-400 font-bold">$--</span>
+                        </div>
+                        <div class="flex items-center justify-between px-1.5 border-r border-gray-800">
+                            <span class="text-sky-400">1H撑:</span>
                             <span id="legend-sup" class="text-sky-400 font-bold">$--</span>
                         </div>
-                        <div class="flex items-center justify-between px-2">
-                            <span class="text-emerald-400">━ 成交密集区:</span>
+                        <div class="flex items-center justify-between px-1.5">
+                            <span class="text-emerald-400">密集区:</span>
                             <span id="legend-dense" class="text-emerald-400 font-bold">$--</span>
                         </div>
                     </div>
 
-                    <!-- Lightweight Charts 画线 K 线挂载容器 -->
-                    <div id="lw-chart-wrapper" class="flex-1 w-full rounded-lg overflow-hidden border border-gray-800 bg-[#080b10] relative min-h-[380px]">
+                    <!-- Lightweight Charts 山形图挂载容器 + 悬浮十字光标 HUD -->
+                    <div id="lw-chart-wrapper" class="flex-1 w-full rounded-lg overflow-hidden border border-gray-800 bg-[#070a0f] relative min-h-[390px]">
+                        <!-- 左上角悬浮实时十字光标数据 HUD -->
+                        <div id="chart-hud" class="absolute top-2.5 left-3 z-20 pointer-events-none bg-[#0b1018]/85 backdrop-blur-sm border border-gray-800/80 rounded-lg px-3 py-1.5 text-[11px] font-mono flex flex-wrap items-center gap-3 text-gray-300 shadow-lg">
+                            <span id="hud-time" class="text-gray-400">移动光标查看明细</span>
+                            <span id="hud-price" class="text-white font-bold"></span>
+                            <span id="hud-hl" class="text-gray-400"></span>
+                            <span id="hud-bands" class="text-sky-300"></span>
+                            <span id="hud-sig" class="text-amber-300 font-bold"></span>
+                        </div>
+
                         <div id="lw-chart" class="w-full h-full"></div>
-                        <div id="chart-loading" class="absolute inset-0 bg-[#080b10]/80 flex items-center justify-center text-xs text-emerald-400 font-mono hidden">
-                            ⚡ 正在同步 K 线与解算【假 / 尖 / 脚 / 呼 / 吸】主图信号...
+
+                        <div id="chart-loading" class="absolute inset-0 z-30 bg-[#070a0f]/85 flex items-center justify-center text-xs text-emerald-400 font-mono hidden">
+                            ⚡ 正在同步山形图与 1 / 2 / 3 信号矩阵...
                         </div>
                     </div>
                 </div>
@@ -200,7 +223,7 @@
                             <span>📱 Discord 手机端零折行代码块预览 (严格 ≤28 字符):</span>
                             <span id="selected-sym-label" class="text-emerald-400 font-mono">当前选中: SOXL</span>
                         </div>
-                        <pre id="discord-preview" class="bg-[#080b10] text-emerald-300 font-mono text-xs p-2.5 rounded border border-gray-800 overflow-x-auto leading-relaxed select-all">正在同步实时点位...</pre>
+                        <pre id="discord-preview" class="bg-[#070a0f] text-emerald-300 font-mono text-xs p-2.5 rounded border border-gray-800 overflow-x-auto leading-relaxed select-all">正在同步实时点位...</pre>
                     </div>
                     <div class="flex sm:flex-col gap-2 w-full sm:w-auto">
                         <button onclick="copyDiscordBlock()" class="flex-1 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg transition whitespace-nowrap">
@@ -327,11 +350,13 @@
 
         const quotesMap = {};
         const klineCache = {};
+        const barLookupByTime = {};
 
         let currentSector = "🌐 置顶大盘与期货";
         let currentRawSym = "SOXL";
-        let currentTimeframe = "1h";
+        let currentTimeframe = "4h";
         let currentBars = [];
+        let isMountainMode = true; // 默认使用专业山形图 (AreaSeries)
 
         // -------------------- 4.3 格式化与 Fioni 空间矩阵解算函数 --------------------
         function fmtPrice(val, sym) {
@@ -445,18 +470,14 @@
             });
         }
 
-        // -------------------- 4.4 Lightweight Charts 画线 + 三大麦语言指标叠加引擎 --------------------
+        // -------------------- 4.4 专业山形图 (AreaSeries) + 1号强支撑/强压力实线轨 + 底部量能柱 --------------------
         let lwChart = null;
+        let mountainSeries = null;
         let candleSeries = null;
-        // 指标1：20周期强阻力线(红实线) 与 强支撑线(绿实线)
+        let volumeSeries = null;
+        // 仅保留 1 号指标的 20 周期强阻力线(红实线) 与 强支撑线(绿实线)
         let ind1ResSeries = null;
         let ind1SupSeries = null;
-        // 指标2：VALUEWHEN 极值针刺防守上沿(红点线) 与 防守下沿(绿点线)
-        let ind2DefHighSeries = null;
-        let ind2DefLowSeries = null;
-        // 指标3：15周期买方流动性池(红虚线) 与 卖方流动性池(绿虚线)
-        let ind3BslPoolSeries = null;
-        let ind3SslPoolSeries = null;
 
         let activePriceLines = [];
 
@@ -465,83 +486,95 @@
             container.innerHTML = '';
             lwChart = LightweightCharts.createChart(container, {
                 layout: {
-                    background: { type: 'solid', color: '#080b10' },
-                    textColor: '#9ca3af',
+                    background: { type: 'solid', color: '#070a0f' },
+                    textColor: '#94a3b8',
                     fontSize: 12
                 },
                 grid: {
-                    vertLines: { color: '#141a26' },
-                    horzLines: { color: '#141a26' }
+                    vertLines: { color: 'rgba(30, 41, 59, 0.45)' },
+                    horzLines: { color: 'rgba(30, 41, 59, 0.45)' }
                 },
                 crosshair: {
-                    mode: LightweightCharts.CrosshairMode.Normal
+                    mode: LightweightCharts.CrosshairMode.Normal,
+                    vertLine: { color: '#475569', width: 1, style: LightweightCharts.LineStyle.Dashed, labelBackgroundColor: '#1e293b' },
+                    horzLine: { color: '#475569', width: 1, style: LightweightCharts.LineStyle.Dashed, labelBackgroundColor: '#1e293b' }
                 },
                 rightPriceScale: {
-                    borderColor: '#1f2637',
-                    scaleMargins: { top: 0.14, bottom: 0.14 }
+                    borderColor: '#1e2638',
+                    scaleMargins: { top: 0.12, bottom: 0.18 }
                 },
                 timeScale: {
-                    borderColor: '#1f2637',
+                    borderColor: '#1e2638',
                     timeVisible: true,
-                    secondsVisible: false
+                    secondsVisible: false,
+                    rightOffset: 6,
+                    barSpacing: 9
                 }
             });
 
+            // 1. 主图山形图 (AreaSeries) - 机构级翠绿渐变山形流线
+            mountainSeries = lwChart.addAreaSeries({
+                lineColor: '#10b981',
+                topColor: 'rgba(16, 185, 129, 0.32)',
+                bottomColor: 'rgba(16, 185, 129, 0.01)',
+                lineWidth: 2,
+                crosshairMarkerVisible: true,
+                crosshairMarkerRadius: 4,
+                priceLineVisible: true,
+                priceLineColor: '#10b981'
+            });
+
+            // 2. 备用蜡烛图图层 (可一键切换)
             candleSeries = lwChart.addCandlestickSeries({
                 upColor: '#10b981',
                 downColor: '#ef4444',
                 borderUpColor: '#10b981',
                 borderDownColor: '#ef4444',
                 wickUpColor: '#10b981',
-                wickDownColor: '#ef4444'
+                wickDownColor: '#ef4444',
+                visible: false
             });
 
-            // 指标1：HHV(HIGH,20) 红粗实线 & LLV(LOW,20) 绿粗实线
+            // 3. 底部副图成交量柱状图 (占底部 15% 高度，不遮挡主图山形线)
+            volumeSeries = lwChart.addHistogramSeries({
+                priceFormat: { type: 'volume' },
+                priceScaleId: ''
+            });
+            volumeSeries.priceScale().applyOptions({
+                scaleMargins: { top: 0.84, bottom: 0.0 }
+            });
+
+            // 4. 仅保留 1 号指标的 20 周期强阻力线 (HHV20 红粗实线) 与 强支撑线 (LLV20 绿粗实线)
             ind1ResSeries = lwChart.addLineSeries({
                 color: '#ef4444',
                 lineWidth: 2,
                 lineStyle: LightweightCharts.LineStyle.Solid,
                 priceLineVisible: false,
-                lastValueVisible: false
+                lastValueVisible: true,
+                title: '强压'
             });
             ind1SupSeries = lwChart.addLineSeries({
                 color: '#22c55e',
                 lineWidth: 2,
                 lineStyle: LightweightCharts.LineStyle.Solid,
                 priceLineVisible: false,
-                lastValueVisible: false
+                lastValueVisible: true,
+                title: '强撑'
             });
 
-            // 指标2：防守上沿 VALUEWHEN(RAW_BEAR_PIN, HIGH) 红点线 & 防守下沿 绿点线
-            ind2DefHighSeries = lwChart.addLineSeries({
-                color: '#fca5a5',
-                lineWidth: 1,
-                lineStyle: LightweightCharts.LineStyle.Dotted,
-                priceLineVisible: false,
-                lastValueVisible: false
-            });
-            ind2DefLowSeries = lwChart.addLineSeries({
-                color: '#86efac',
-                lineWidth: 1,
-                lineStyle: LightweightCharts.LineStyle.Dotted,
-                priceLineVisible: false,
-                lastValueVisible: false
-            });
-
-            // 指标3：买方流动性池 REF(HHV(H,15),1) & 卖方流动性池 REF(LLV(L,15),1)
-            ind3BslPoolSeries = lwChart.addLineSeries({
-                color: 'rgba(244, 63, 94, 0.65)',
-                lineWidth: 1,
-                lineStyle: LightweightCharts.LineStyle.Dashed,
-                priceLineVisible: false,
-                lastValueVisible: false
-            });
-            ind3SslPoolSeries = lwChart.addLineSeries({
-                color: 'rgba(16, 185, 129, 0.65)',
-                lineWidth: 1,
-                lineStyle: LightweightCharts.LineStyle.Dashed,
-                priceLineVisible: false,
-                lastValueVisible: false
+            // 5. 十字光标移动实时 HUD 详情联动
+            lwChart.subscribeCrosshairMove(param => {
+                if (!param || !param.time || !barLookupByTime[param.time]) {
+                    return;
+                }
+                const info = barLookupByTime[param.time];
+                const dt = new Date(param.time * 1000);
+                const timeStr = `${dt.getMonth()+1}/${dt.getDate()} ${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}`;
+                document.getElementById('hud-time').innerText = timeStr;
+                document.getElementById('hud-price').innerText = `收: ${fmtPrice(info.close, currentRawSym)}`;
+                document.getElementById('hud-hl').innerText = `高:${fmtPrice(info.high, currentRawSym)} 低:${fmtPrice(info.low, currentRawSym)}`;
+                document.getElementById('hud-bands').innerText = info.hhv20 ? `强压:${fmtPrice(info.hhv20, currentRawSym)} 强撑:${fmtPrice(info.llv20, currentRawSym)}` : '';
+                document.getElementById('hud-sig').innerText = info.sigText ? `⚡[${info.sigText}]` : '';
             });
 
             window.addEventListener('resize', () => {
@@ -551,13 +584,36 @@
             });
         }
 
-        // ==================== 核心新增：1:1 复刻三套 MOOMOO 麦语言主图指标算法 ====================
-        function evaluateAndRenderThreeIndicators(bars) {
-            if (!candleSeries || !bars || bars.length < 5) return;
+        function toggleChartStyle() {
+            isMountainMode = !isMountainMode;
+            const btn = document.getElementById('btn-chart-mode');
+            if (isMountainMode) {
+                btn.innerText = "⛰️ 山形图";
+                btn.className = "px-2 py-1 rounded bg-emerald-950 text-emerald-300 border border-emerald-800/70 hover:bg-emerald-900 transition";
+                mountainSeries.applyOptions({ visible: true });
+                candleSeries.applyOptions({ visible: false });
+            } else {
+                btn.innerText = "🕯️ 蜡烛图";
+                btn.className = "px-2 py-1 rounded bg-amber-950 text-amber-300 border border-amber-800/70 hover:bg-amber-900 transition";
+                mountainSeries.applyOptions({ visible: false });
+                candleSeries.applyOptions({ visible: true });
+            }
+            refreshIndicatorsOnly();
+            const q = quotesMap[currentRawSym] || FALLBACK_QUOTES[currentRawSym];
+            drawKeyLevelsOnChart(q, currentRawSym);
+        }
 
-            const showInd1 = document.getElementById('chk-ind1')?.checked ?? true;
-            const showInd2 = document.getElementById('chk-ind2')?.checked ?? true;
-            const showInd3 = document.getElementById('chk-ind3')?.checked ?? true;
+        function resetChartZoom() {
+            if (lwChart) lwChart.timeScale().fitContent();
+        }
+
+        // ==================== 核心解算：匿名化 1 / 2 / 3 指标算法 (仅保留 1 号强支撑/强压力辅助线) ====================
+        function evaluateAndRenderThreeIndicators(bars) {
+            if (!mountainSeries || !bars || bars.length < 5) return;
+
+            const show1 = document.getElementById('chk-ind1')?.checked ?? true;
+            const show2 = document.getElementById('chk-ind2')?.checked ?? true;
+            const show3 = document.getElementById('chk-ind3')?.checked ?? true;
 
             const n = bars.length;
             const hhv20 = new Array(n).fill(0);
@@ -568,7 +624,6 @@
             const rangeMa10 = new Array(n).fill(0);
 
             for (let i = 0; i < n; i++) {
-                // HHV20 / LLV20
                 let max20 = -Infinity, min20 = Infinity;
                 for (let j = Math.max(0, i - 19); j <= i; j++) {
                     if (bars[j].high > max20) max20 = bars[j].high;
@@ -577,7 +632,6 @@
                 hhv20[i] = max20;
                 llv20[i] = min20;
 
-                // HHV15 / LLV15
                 let max15 = -Infinity, min15 = Infinity;
                 for (let j = Math.max(0, i - 14); j <= i; j++) {
                     if (bars[j].high > max15) max15 = bars[j].high;
@@ -586,7 +640,6 @@
                 hhv15[i] = max15;
                 llv15[i] = min15;
 
-                // MA(VOL, 20)
                 let vSum = 0, vCnt = 0;
                 for (let j = Math.max(0, i - 19); j <= i; j++) {
                     vSum += (bars[j].volume || 1);
@@ -594,7 +647,6 @@
                 }
                 volMa20[i] = vSum / vCnt;
 
-                // MA(RANGE_K, 10)
                 let rSum = 0, rCnt = 0;
                 for (let j = Math.max(0, i - 9); j <= i; j++) {
                     rSum += (bars[j].high - bars[j].low);
@@ -605,15 +657,12 @@
 
             const ind1ResData = [];
             const ind1SupData = [];
-            const ind2HighData = [];
-            const ind2LowData = [];
-            const ind3BslData = [];
-            const ind3SslData = [];
-
-            let lastDefHigh = null;
-            let lastDefLow = null;
             const markers = [];
-            let trigCount = { brk: 0, pin: 0, swp: 0 };
+            let trigCount = { c1: 0, c2: 0, c3: 0 };
+
+            // 智能防刷屏冷却锁：避免相邻 K 线重复堆叠同一方向文字
+            let lastBearPinIdx = -10;
+            let lastBullPinIdx = -10;
 
             for (let i = 0; i < n; i++) {
                 const b = bars[i];
@@ -623,27 +672,19 @@
                 const upShad = b.high - Math.max(b.close, b.open);
                 const dnShad = Math.min(b.close, b.open) - b.low;
 
-                // 指标1动态轨道数据
-                if (showInd1) {
+                // 仅绘制 1 号指标的 20 周期强阻力线 & 强支撑线
+                if (show1) {
                     ind1ResData.push({ time: t, value: hhv20[i] });
                     ind1SupData.push({ time: t, value: llv20[i] });
-                }
-
-                // 指标3动态流动性池轨道数据 (REF(HHV(H,15), 1))
-                if (i >= 1 && showInd3) {
-                    ind3BslData.push({ time: t, value: hhv15[i - 1] });
-                    ind3SslData.push({ time: t, value: llv15[i - 1] });
                 }
 
                 const aboveTags = [];
                 const belowTags = [];
                 let aboveColor = '#22c55e';
                 let belowColor = '#ef4444';
-                let aboveShape = 'arrowDown';
-                let belowShape = 'arrowUp';
 
-                // ---------------- 1. 4H静态高低位量价真假突破识别系统 ----------------
-                if (i >= 1 && showInd1) {
+                // ---------------- 信号 1 ----------------
+                if (i >= 1 && show1) {
                     const refRes = hhv20[i - 1];
                     const refSup = llv20[i - 1];
                     const prevClose = bars[i - 1].close;
@@ -658,57 +699,53 @@
                     const falseBear1 = (b.low < refSup) && (b.close > refSup) && (dnShad >= 0.3 * (rangeK + 0.0001));
 
                     if (trueBullBreak) {
-                        belowTags.push('▲真破');
-                        belowColor = '#ef4444'; // 红箭头向上
-                        trigCount.brk++;
+                        belowTags.push('▲');
+                        belowColor = '#ef4444';
+                        trigCount.c1++;
                     }
                     if (trueBearBreak) {
-                        aboveTags.push('▼真跌');
-                        aboveColor = '#22c55e'; // 绿箭头向下
-                        trigCount.brk++;
+                        aboveTags.push('▼');
+                        aboveColor = '#22c55e';
+                        trigCount.c1++;
                     }
                     if (falseBull1 || falseBull2) {
                         aboveTags.push('假');
-                        aboveColor = '#22c55e'; // 向上假突破：绿色"假"
-                        trigCount.brk++;
+                        aboveColor = '#22c55e';
+                        trigCount.c1++;
                     }
                     if (falseBear1) {
                         belowTags.push('假');
-                        belowColor = '#ef4444'; // 向下假跌破：红色"假"
-                        trigCount.brk++;
+                        belowColor = '#ef4444';
+                        trigCount.c1++;
                     }
                 }
 
-                // ---------------- 2. 顶底针刺反转形态识别 (合体增强版) ----------------
-                const atrFilter = rangeK > 0.6 * rangeMa10[i];
-                const volFilter = (b.volume || 1) >= 1.2 * volMa20[i];
-                const isHighZone = b.high >= hhv15[i] * 0.985;
-                const isLowZone  = b.low  <= llv15[i] * 1.015;
+                // ---------------- 信号 2 (已彻底祛除辅助线，仅保留形态信号) ----------------
+                if (show2) {
+                    const atrFilter = rangeK > 0.6 * rangeMa10[i];
+                    const volFilter = (b.volume || 1) >= 1.2 * volMa20[i];
+                    const isHighZone = b.high >= hhv15[i] * 0.985;
+                    const isLowZone  = b.low  <= llv15[i] * 1.015;
 
-                const rawBearPin = isHighZone && (rangeK > 0) && ((upShad / rangeK) > 0.50) && ((body / rangeK) < 0.35) && atrFilter;
-                const rawBullPin = isLowZone  && (rangeK > 0) && ((dnShad / rangeK) > 0.50) && ((body / rangeK) < 0.35) && atrFilter;
+                    const rawBearPin = isHighZone && (rangeK > 0) && ((upShad / rangeK) > 0.50) && ((body / rangeK) < 0.35) && atrFilter;
+                    const rawBullPin = isLowZone  && (rangeK > 0) && ((dnShad / rangeK) > 0.50) && ((body / rangeK) < 0.35) && atrFilter;
 
-                if (rawBearPin) lastDefHigh = b.high;
-                if (rawBullPin) lastDefLow  = b.low;
-
-                if (showInd2) {
-                    if (lastDefHigh !== null) ind2HighData.push({ time: t, value: lastDefHigh });
-                    if (lastDefLow !== null)  ind2LowData.push({ time: t, value: lastDefLow });
-
-                    if (rawBearPin) {
+                    if (rawBearPin && (i - lastBearPinIdx >= 3 || volFilter)) {
                         aboveTags.push('尖');
-                        aboveColor = volFilter ? '#22c55e' : '#e5e7eb'; // 放量绿"尖"，无量白"尖"
-                        trigCount.pin++;
+                        aboveColor = volFilter ? '#22c55e' : '#e2e8f0';
+                        lastBearPinIdx = i;
+                        trigCount.c2++;
                     }
-                    if (rawBullPin) {
+                    if (rawBullPin && (i - lastBullPinIdx >= 3 || volFilter)) {
                         belowTags.push('脚');
-                        belowColor = volFilter ? '#ef4444' : '#e5e7eb'; // 放量红"脚"，无量白"脚"
-                        trigCount.pin++;
+                        belowColor = volFilter ? '#ef4444' : '#e2e8f0';
+                        lastBullPinIdx = i;
+                        trigCount.c2++;
                     }
                 }
 
-                // ---------------- 3. 流动性清扫识别指标 (BSL/SSL Sweep) ----------------
-                if (i >= 1 && showInd3) {
+                // ---------------- 信号 3 (已彻底祛除辅助线，仅保留清扫信号) ----------------
+                if (i >= 1 && show3) {
                     const prevSwingHigh = hhv15[i - 1];
                     const prevSwingLow  = llv15[i - 1];
 
@@ -717,23 +754,30 @@
 
                     if (bslSweep) {
                         aboveTags.push('呼');
-                        aboveColor = '#22c55e'; // 顶端清扫流出：绿色"呼"
-                        trigCount.swp++;
+                        aboveColor = '#22c55e';
+                        trigCount.c3++;
                     }
                     if (sslSweep) {
                         belowTags.push('吸');
-                        belowColor = '#ef4444'; // 底端清扫吸筹：红色"吸"
-                        trigCount.swp++;
+                        belowColor = '#ef4444';
+                        trigCount.c3++;
                     }
                 }
 
-                // 合并同一根 K 线上方/下方的信号文字，避免重叠
+                const combinedSig = [...aboveTags, ...belowTags].join('·');
+                barLookupByTime[t] = {
+                    ...b,
+                    hhv20: hhv20[i],
+                    llv20: llv20[i],
+                    sigText: combinedSig
+                };
+
                 if (aboveTags.length > 0) {
                     markers.push({
                         time: t,
                         position: 'aboveBar',
                         color: aboveColor,
-                        shape: aboveShape,
+                        shape: 'arrowDown',
                         text: Array.from(new Set(aboveTags)).join('·')
                     });
                 }
@@ -742,24 +786,34 @@
                         time: t,
                         position: 'belowBar',
                         color: belowColor,
-                        shape: belowShape,
+                        shape: 'arrowUp',
                         text: Array.from(new Set(belowTags)).join('·')
                     });
                 }
             }
 
-            // 更新图表曲线与 K 线标注
-            ind1ResSeries.setData(showInd1 ? ind1ResData : []);
-            ind1SupSeries.setData(showInd1 ? ind1SupData : []);
-            ind2DefHighSeries.setData(showInd2 ? ind2HighData : []);
-            ind2DefLowSeries.setData(showInd2 ? ind2LowData : []);
-            ind3BslPoolSeries.setData(showInd3 ? ind3BslData : []);
-            ind3SslPoolSeries.setData(showInd3 ? ind3SslData : []);
-            candleSeries.setMarkers(markers);
+            // 更新 1 号指标的强阻力线与强支撑线
+            ind1ResSeries.setData(show1 ? ind1ResData : []);
+            ind1SupSeries.setData(show1 ? ind1SupData : []);
+
+            // 更新图例中的最新 20 周期强压/强撑数值
+            if (n > 0) {
+                document.getElementById('legend-hhv20').innerText = fmtPrice(hhv20[n - 1], currentRawSym);
+                document.getElementById('legend-llv20').innerText = fmtPrice(llv20[n - 1], currentRawSym);
+            }
+
+            // 将信号标记挂载到当前激活的主图层（山形图或蜡烛图）
+            if (isMountainMode) {
+                mountainSeries.setMarkers(markers);
+                candleSeries.setMarkers([]);
+            } else {
+                candleSeries.setMarkers(markers);
+                mountainSeries.setMarkers([]);
+            }
 
             const sumEl = document.getElementById('ind-active-summary');
             if (sumEl) {
-                sumEl.innerText = `本周期捕捉: 真假突破(${trigCount.brk}) | 顶底尖脚(${trigCount.pin}) | 呼吸清扫(${trigCount.swp})`;
+                sumEl.innerText = `信号统计: 1(${trigCount.c1}) | 2(${trigCount.c2}) | 3(${trigCount.c3})`;
             }
         }
 
@@ -770,41 +824,46 @@
         }
 
         function drawKeyLevelsOnChart(q, rawSym) {
-            if (!candleSeries || !q) return;
+            const targetSeries = isMountainMode ? mountainSeries : candleSeries;
+            if (!targetSeries || !q) return;
 
-            activePriceLines.forEach(line => {
-                try { candleSeries.removePriceLine(line); } catch (e) {}
+            activePriceLines.forEach(item => {
+                try { item.series.removePriceLine(item.line); } catch (e) {}
             });
             activePriceLines = [];
 
-            const resLine = candleSeries.createPriceLine({
+            const resLine = targetSeries.createPriceLine({
                 price: q.res,
                 color: '#f87171',
-                lineWidth: 2,
+                lineWidth: 1,
                 lineStyle: LightweightCharts.LineStyle.Dashed,
                 axisLabelVisible: true,
-                title: `🚨 1H压力位 ${fmtPrice(q.res, rawSym)}`
+                title: `1H压 ${fmtPrice(q.res, rawSym)}`
             });
 
-            const supLine = candleSeries.createPriceLine({
+            const supLine = targetSeries.createPriceLine({
                 price: q.sup,
                 color: '#38bdf8',
-                lineWidth: 2,
+                lineWidth: 1,
                 lineStyle: LightweightCharts.LineStyle.Dashed,
                 axisLabelVisible: true,
-                title: `🛡️ 1H支撑位 ${fmtPrice(q.sup, rawSym)}`
+                title: `1H撑 ${fmtPrice(q.sup, rawSym)}`
             });
 
-            const denseLine = candleSeries.createPriceLine({
+            const denseLine = targetSeries.createPriceLine({
                 price: q.dense,
                 color: '#10b981',
                 lineWidth: 2,
                 lineStyle: LightweightCharts.LineStyle.Solid,
                 axisLabelVisible: true,
-                title: `🎯 技术性成交密集区 ${fmtPrice(q.dense, rawSym)}`
+                title: `🎯 密集区 ${fmtPrice(q.dense, rawSym)}`
             });
 
-            activePriceLines.push(resLine, supLine, denseLine);
+            activePriceLines.push(
+                { series: targetSeries, line: resLine },
+                { series: targetSeries, line: supLine },
+                { series: targetSeries, line: denseLine }
+            );
 
             document.getElementById('legend-spot').innerText = fmtPrice(q.spot, rawSym);
             document.getElementById('legend-res').innerText = fmtPrice(q.res, rawSym);
@@ -814,52 +873,67 @@
             document.getElementById('chart-sig-badge').innerText = q.tag;
         }
 
+        // 修复版自然流体离线波形生成器（彻底消除梳子状伪影，贴合真实波段结构）
         function generateRealisticKlines(q, tf) {
-            const count = 90;
+            const count = 96;
             const nowSec = Math.floor(Date.now() / 1000);
             const stepSec = tf === '15m' ? 900 : (tf === '1h' ? 3600 : (tf === '4h' ? 14400 : 86400));
             const bars = [];
 
-            let price = q.spot;
-            const volScale = (q.res - q.dense) * 0.12 || (q.spot * 0.008);
-            const revWalk = [price];
+            const span = Math.max(q.spot * 0.06, (q.res - q.dense) * 0.85);
+            const mid = (q.sup + q.res) * 0.5;
+            const closes = new Array(count).fill(0);
 
-            let seed = Math.round(q.spot * 100);
-            function pseudoRand() {
-                seed = (seed * 9301 + 49297) % 233280;
-                return (seed / 233280) - 0.5;
+            // 使用多频正弦波 + 确定性哈希噪声合成自然的金融趋势波段，终点严格锚定 q.spot
+            let rawArr = [];
+            let acc = 0;
+            const symSeed = (q.spot * 13.37) + (q.dense * 7.1);
+            for (let i = 0; i < count; i++) {
+                const wave1 = Math.sin((i / count) * Math.PI * 2.5 + symSeed) * (span * 0.28);
+                const wave2 = Math.cos((i / count) * Math.PI * 5.5 + symSeed * 1.7) * (span * 0.12);
+                const noise = (Math.sin(i * 12.9898 + symSeed) * 43758.5453 % 1) * (span * 0.06);
+                acc = acc * 0.85 + noise;
+                rawArr.push(mid + wave1 + wave2 + acc);
             }
 
-            for (let i = 1; i < count; i++) {
-                const pullToMid = ((q.sup + q.res) / 2 - price) * 0.08;
-                const delta = pseudoRand() * volScale + pullToMid;
-                price = Math.max(q.dense * 0.94, price - delta);
-                revWalk.push(price);
+            // 将最后一根平滑过渡锚定到真实 q.spot
+            const endDiff = q.spot - rawArr[count - 1];
+            for (let i = 0; i < count; i++) {
+                const weight = Math.pow(i / (count - 1), 1.6);
+                closes[i] = Math.max(q.dense * 0.92, rawArr[i] + endDiff * weight);
             }
-            revWalk.reverse();
+            closes[count - 1] = q.spot;
 
             for (let i = 0; i < count; i++) {
-                const close = i === count - 1 ? q.spot : revWalk[i];
-                const open = i === 0 ? close * 0.995 : revWalk[i - 1];
-                const rVal = Math.abs(pseudoRand());
-                // 偶尔生成长上下影线以自然呈现针刺与清扫形态
-                const spikeMult = (i % 14 === 0 || i === count - 3) ? 2.4 : 1.0;
-                const wig = (Math.abs(close - open) * 0.6 + volScale * 0.35) * spikeMult;
-                const high = Math.max(open, close) + wig * (i % 7 === 0 ? 1.3 : 0.45);
-                const low = Math.min(open, close) - wig * (i % 5 === 0 ? 1.3 : 0.45);
+                const close = Number(closes[i].toFixed(2));
+                const open = Number((i === 0 ? close * 0.996 : closes[i - 1]).toFixed(2));
+                const body = Math.abs(close - open);
+                const baseWick = Math.max(q.spot * 0.003, body * 0.55);
+
+                // 仅在波段极值点自然产生上下影线
+                const isLocalHigh = i > 2 && i < count - 2 && close > closes[i-1] && close > closes[i+1];
+                const isLocalLow  = i > 2 && i < count - 2 && close < closes[i-1] && close < closes[i+1];
+
+                const upWick = isLocalHigh ? baseWick * 2.3 : baseWick * 0.6;
+                const dnWick = isLocalLow  ? baseWick * 2.3 : baseWick * 0.6;
+
+                const high = Number((Math.max(open, close) + upWick).toFixed(2));
+                const low  = Number((Math.min(open, close) - dnWick).toFixed(2));
+                const volMult = (isLocalHigh || isLocalLow) ? 1.65 : (0.75 + (i % 5) * 0.12);
+
                 bars.push({
                     time: nowSec - (count - 1 - i) * stepSec,
-                    open: Number(open.toFixed(2)),
-                    high: Number(high.toFixed(2)),
-                    low: Number(low.toFixed(2)),
-                    close: Number(close.toFixed(2)),
-                    volume: Math.round(1000000 * (0.4 + rVal * 1.8))
+                    open,
+                    high,
+                    low,
+                    close,
+                    volume: Math.round(1200000 * volMult)
                 });
             }
             return bars;
         }
 
-        async function fetchRealYahooKlines(rawSym, tf = '1h') {
+        async function fetchRealYahooKlines(rawSym, tf = '4h') {
             const yfInterval = tf === '4h' ? '1h' : tf;
             const yfRange = tf === '15m' ? '5d' : (tf === '1d' ? '6mo' : '1mo');
             const candidateSyms = rawSym === 'NQZ26.CME' ? ['NQZ26.CME', 'NQ=F'] : [rawSym];
@@ -867,8 +941,9 @@
             for (const querySym of candidateSyms) {
                 const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(querySym)}?interval=${yfInterval}&range=${yfRange}`;
                 const proxies = [
+                    `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`,
                     `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`,
-                    `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`
+                    `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetUrl)}`
                 ];
 
                 for (const proxyUrl of proxies) {
@@ -927,14 +1002,14 @@
 
             const dispName = getDisplayName(rawSym);
             const titleLabel = dispName === 'Y' ? '因子Y (已保密脱敏)' : dispName;
-            document.getElementById('chart-title').innerText = `📈 ${titleLabel} 量化画线 K 线终端 (${tf.toUpperCase()})`;
+            document.getElementById('chart-title').innerText = `⛰️ ${titleLabel} 量化山形图终端 (${tf.toUpperCase()})`;
             document.getElementById('chart-loading').classList.remove('hidden');
 
             document.querySelectorAll('.tf-btn').forEach(btn => {
-                btn.className = "tf-btn px-2.5 py-1 rounded bg-gray-800 hover:bg-gray-700 text-gray-300";
+                btn.className = "tf-btn px-2 py-1 rounded bg-gray-800 hover:bg-gray-700 text-gray-300";
             });
             const activeBtn = document.getElementById(`btn-tf-${tf}`);
-            if (activeBtn) activeBtn.className = "tf-btn px-2.5 py-1 rounded bg-blue-600 text-white font-semibold";
+            if (activeBtn) activeBtn.className = "tf-btn px-2 py-1 rounded bg-blue-600 text-white font-semibold";
 
             const cacheKey = `${rawSym}_${tf}`;
             let bars = klineCache[cacheKey];
@@ -946,7 +1021,7 @@
                     const liveCalc = calculateFioniLevels(bars, rawSym);
                     quotesMap[rawSym] = liveCalc;
                     const nowStr = new Date().toLocaleTimeString('zh-CN', { hour12: false });
-                    document.getElementById('sync-status').innerText = `🟢 实时行情与三合一主图信号已同步 (${nowStr})`;
+                    document.getElementById('sync-status').innerText = `🟢 实时行情已同步 (${nowStr})`;
                     document.getElementById('sync-status').className = "text-[11px] px-2.5 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 font-mono";
                 }
             }
@@ -957,11 +1032,37 @@
             }
 
             currentBars = bars;
+
+            // 1. 灌入山形图数据 (time, value = close)
+            const areaData = bars.map(b => ({ time: b.time, value: b.close }));
+            mountainSeries.setData(areaData);
+
+            // 2. 灌入备用蜡烛图数据
             candleSeries.setData(bars);
+
+            // 3. 灌入底部成交量柱状图数据 (红绿随阴阳线变色)
+            const volData = bars.map(b => ({
+                time: b.time,
+                value: b.volume || 0,
+                color: b.close >= b.open ? 'rgba(16, 185, 129, 0.25)' : 'rgba(239, 68, 68, 0.25)'
+            }));
+            volumeSeries.setData(volData);
+
+            // 4. 绘制 1H 支撑/压力/密集区水平线 + 解算 1/2/3 信号与强支撑强压力轨
             drawKeyLevelsOnChart(q, rawSym);
-            // 同步渲染三大麦语言指标的轨道线与 K 线顶底信号文字
             evaluateAndRenderThreeIndicators(bars);
             lwChart.timeScale().fitContent();
+
+            // 默认更新 HUD 为最后一根 K 线状态
+            const lastBar = bars[bars.length - 1];
+            if (lastBar && barLookupByTime[lastBar.time]) {
+                const info = barLookupByTime[lastBar.time];
+                document.getElementById('hud-time').innerText = "最新Bar";
+                document.getElementById('hud-price').innerText = `现价: ${fmtPrice(info.close, rawSym)}`;
+                document.getElementById('hud-hl').innerText = `高:${fmtPrice(info.high, rawSym)} 低:${fmtPrice(info.low, rawSym)}`;
+                document.getElementById('hud-bands').innerText = `强压:${fmtPrice(info.hhv20, rawSym)} 强撑:${fmtPrice(info.llv20, rawSym)}`;
+                document.getElementById('hud-sig').innerText = info.sigText ? `⚡[${info.sigText}]` : '';
+            }
 
             document.getElementById('chart-loading').classList.add('hidden');
             renderAllCards();
@@ -993,7 +1094,7 @@
                 const isActive = currentRawSym === sym ? 'card-active' : '';
                 return `
                 <div onclick="selectTickerBySym('${sym}')"
-                    class="bg-[#0b0e14] p-3 rounded-xl border border-gray-800 card-hover ${isActive} cursor-pointer transition flex flex-col justify-between">
+                    class="bg-[#090d14] p-3 rounded-xl border border-gray-800 card-hover ${isActive} cursor-pointer transition flex flex-col justify-between">
                     <div class="flex justify-between items-center">
                         <span class="font-bold text-white text-sm">${sym}</span>
                         <span class="text-[11px] px-1.5 py-0.5 rounded bg-gray-800 text-amber-300">${q.tag}</span>
@@ -1016,7 +1117,7 @@
                 const isActive = currentRawSym === sym ? 'card-active' : '';
                 return `
                 <div onclick="selectTickerBySym('${sym}')"
-                    class="bg-[#0b0e14] p-3 rounded-xl border border-gray-800 card-hover ${isActive} cursor-pointer transition flex flex-col justify-between">
+                    class="bg-[#090d14] p-3 rounded-xl border border-gray-800 card-hover ${isActive} cursor-pointer transition flex flex-col justify-between">
                     <div class="flex justify-between items-center gap-1">
                         <span class="font-bold text-sky-300 text-xs truncate">${disp}</span>
                         <span class="text-[10px] px-1.5 py-0.5 rounded bg-gray-800 text-emerald-300 whitespace-nowrap">${q.tag}</span>
@@ -1046,13 +1147,13 @@
             }
 
             document.getElementById('resonance-box').innerHTML = `
-                <div class="p-2 rounded-lg bg-[#0b0e14] border border-gray-800 text-emerald-300 font-medium">
+                <div class="p-2 rounded-lg bg-[#090d14] border border-gray-800 text-emerald-300 font-medium">
                     ${macroStr} <span class="text-gray-400 font-mono ml-1">(芯片RSI:${soxl.rsi} vs 因子Y:${yAsset.rsi})</span>
                 </div>
-                <div class="p-2 rounded-lg bg-[#0b0e14] border border-gray-800 text-gray-200 font-mono">
+                <div class="p-2 rounded-lg bg-[#090d14] border border-gray-800 text-gray-200 font-mono">
                     ⚔️ 【SOXL×SOXS 镜像】SOXL(现:${fmtPrice(soxl.spot,'SOXL')}|密集区:${fmtPrice(soxl.dense,'SOXL')}) vs SOXS(现:${fmtPrice(soxs.spot,'SOXS')}|密集区:${fmtPrice(soxs.dense,'SOXS')})
                 </div>
-                <div class="p-2 rounded-lg bg-[#0b0e14] border border-gray-800 text-gray-200 font-mono">
+                <div class="p-2 rounded-lg bg-[#090d14] border border-gray-800 text-gray-200 font-mono">
                     ⚔️ 【TQQQ×SQQQ 镜像】TQQQ(现:${fmtPrice(tqqq.spot,'TQQQ')}|密集区:${fmtPrice(tqqq.dense,'TQQQ')}) vs SQQQ(现:${fmtPrice(sqqq.spot,'SQQQ')}|密集区:${fmtPrice(sqqq.dense,'SQQQ')})
                 </div>
             `;
@@ -1060,7 +1161,7 @@
             const tabsEl = document.getElementById('sector-tabs');
             tabsEl.innerHTML = Object.keys(SECTOR_CONFIG).map(sec => `
                 <button onclick="switchSector('${sec}')" 
-                    class="px-3 py-1.5 rounded-lg whitespace-nowrap transition font-medium ${sec === currentSector ? 'bg-blue-600 text-white' : 'bg-[#0b0e14] text-gray-400 hover:text-white border border-gray-800'}">
+                    class="px-3 py-1.5 rounded-lg whitespace-nowrap transition font-medium ${sec === currentSector ? 'bg-blue-600 text-white' : 'bg-[#090d14] text-gray-400 hover:text-white border border-gray-800'}">
                     ${sec}
                 </button>
             `).join('');
@@ -1088,7 +1189,7 @@
                 const isActive = currentRawSym === rawSym ? 'card-active' : '';
                 return `
                 <div onclick="selectTickerBySym('${rawSym}')"
-                    class="p-3 rounded-xl bg-[#0b0e14] border border-gray-800/90 card-hover ${isActive} cursor-pointer transition">
+                    class="p-3 rounded-xl bg-[#090d14] border border-gray-800/90 card-hover ${isActive} cursor-pointer transition">
                     <div class="flex justify-between items-center text-xs">
                         <span class="font-bold text-white text-sm">${disp}</span>
                         <span class="font-mono text-white font-semibold">现: ${fmtPrice(q.spot, rawSym)}</span>
