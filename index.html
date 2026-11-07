@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>菲欧尼之心 (Heart of Fioni) · 私有量化巡航终端 v3.0</title>
+    <title>菲欧尼之心 (Heart of Fioni) · 私有量化巡航终端 v4.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
     <style>
@@ -12,6 +12,7 @@
         .card-hover:hover { border-color: #3b82f6; background-color: #161c2a; }
         .card-active { border-color: #10b981 !important; background-color: #131c27 !important; }
         .glow-emerald { box-shadow: 0 0 20px rgba(16, 185, 129, 0.12); }
+        .glow-blue { box-shadow: 0 0 20px rgba(59, 130, 246, 0.12); }
         ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: #0b0e14; }
         ::-webkit-scrollbar-thumb { background: #262f45; border-radius: 3px; }
@@ -27,7 +28,7 @@
             </div>
             <div>
                 <h2 class="text-xl font-bold text-white tracking-wider">菲欧尼之心 · 私有量化终端</h2>
-                <p class="text-xs text-gray-400 mt-1">Fioni Core Spatial Matrix · 授权访问网关 v3.0</p>
+                <p class="text-xs text-gray-400 mt-1">Fioni Core Spatial Matrix · 授权访问网关 v4.0</p>
             </div>
             <div class="space-y-3">
                 <input id="pwd-input" type="password" placeholder="请输入终端访问授权码..." 
@@ -49,7 +50,7 @@
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
             </span>
-            <h1 class="text-lg font-bold tracking-wider text-white">菲欧尼之心 <span class="text-xs font-mono px-2 py-0.5 bg-emerald-950 text-emerald-400 rounded border border-emerald-800/60 ml-1">FIONI PRO v3.0</span></h1>
+            <h1 class="text-lg font-bold tracking-wider text-white">菲欧尼之心 <span class="text-xs font-mono px-2 py-0.5 bg-emerald-950 text-emerald-400 rounded border border-emerald-800/60 ml-1">FIONI PRO v4.0</span></h1>
             <span id="sync-status" class="text-[11px] px-2.5 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-800 font-mono">🔄 正在实时解算行情与画线...</span>
             <button onclick="refreshLiveAll()" class="text-[11px] px-2.5 py-1 rounded bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 transition">🔄 刷新实时行情</button>
         </div>
@@ -68,17 +69,17 @@
     </header>
 
     <!-- ==================== 3. 主体网格布局 ==================== -->
-    <main class="flex-1 p-4 lg:p-6 max-w-[1640px] w-full mx-auto space-y-6">
+    <main class="flex-1 p-4 lg:p-6 max-w-[1640px] w-full mx-auto space-y-5">
 
-        <!-- 3.1 顶部：三大跨板块共振与置顶 3X 决战台 -->
+        <!-- 3.1 置顶一：三大跨板块共振与置顶 3X 决战台 -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
             <!-- 置顶 3X 多空核心 (7 Cols) -->
             <div class="lg:col-span-7 card-bg rounded-xl p-4 glow-emerald">
                 <div class="flex justify-between items-center mb-3">
                     <h2 class="text-sm font-bold text-amber-400 flex items-center gap-1.5">
-                        👑 【置顶】3X 多空杠杆决战台 (实时价格 + 自动画线)
+                        👑 【置顶一】3X 多空杠杆决战台 (SOXL / SOXS / TQQQ / SQQQ)
                     </h2>
-                    <span class="text-[11px] text-gray-400">点击任意卡片即刻在右侧 K 线画出压力/支撑/密集区</span>
+                    <span class="text-[11px] text-gray-400">点击卡片即刻切换右侧 K 线与支撑压力画线</span>
                 </div>
                 <div id="pinned-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
                     <!-- JS 注入 SOXL, SOXS, TQQQ, SQQQ -->
@@ -97,15 +98,28 @@
             </div>
         </div>
 
-        <!-- 3.2 中下部：左侧五大梯队看板 + 右侧带画线 K 线终端 -->
+        <!-- 3.2 置顶二：核心大盘指数与主连期货总览栏 (新增独立置顶栏) -->
+        <div class="card-bg rounded-xl p-4 glow-blue">
+            <div class="flex flex-wrap justify-between items-center gap-2 mb-3">
+                <h2 class="text-sm font-bold text-sky-400 flex items-center gap-1.5">
+                    🌐 【置顶二】核心大盘指数与期货总览台 (SOXX / QQQ / SPY / SPX标普500指数 / VOO / NQMAIN 2612纳指期货)
+                </h2>
+                <span class="text-[11px] text-gray-400">1倍指数母体与纳指100期货主连2612 · 点击任意卡片联动右侧画线K线</span>
+            </div>
+            <div id="index-pinned-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                <!-- JS 注入 SOXX, QQQ, SPY, ^GSPC(SPX), VOO, NQZ26.CME(NQMAIN 2612) -->
+            </div>
+        </div>
+
+        <!-- 3.3 中下部：左侧六大梯队看板 + 右侧带画线 K 线终端 -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
             
-            <!-- 左侧：五大梯队点位看板 (5 Cols) -->
+            <!-- 左侧：六大梯队点位看板 (5 Cols) -->
             <div class="lg:col-span-5 card-bg rounded-xl p-4 flex flex-col h-[740px]">
                 <div class="flex justify-between items-center mb-3 pb-2 border-b border-gray-800">
                     <div>
-                        <h2 class="text-sm font-bold text-white">⚡ 五大梯队 · 技术性成交密集区</h2>
-                        <p class="text-[11px] text-gray-400 mt-0.5">点击任意标的自动在右侧 K 线标注三道核心关键位</p>
+                        <h2 class="text-sm font-bold text-white">⚡ 核心梯队 · 技术性成交密集区</h2>
+                        <p class="text-[11px] text-gray-400 mt-0.5">含 SPX标普指数、VOO、NQMAIN 2612 及全板块核心池</p>
                     </div>
                     <input id="search-input" type="text" placeholder="搜索代码..." oninput="renderSectors()"
                         class="px-2.5 py-1 text-xs rounded bg-[#0b0e14] border border-gray-700 text-white w-28 focus:outline-none focus:border-blue-500" />
@@ -131,7 +145,9 @@
                             <span id="chart-sig-badge" class="text-xs bg-gray-800 text-amber-300 px-2 py-0.5 rounded">解算中</span>
                         </div>
                         <div class="flex items-center gap-1.5 text-xs">
-                            <button onclick="selectTickerBySym('SOXL')" class="px-2.5 py-1 rounded bg-amber-600/20 text-amber-300 border border-amber-600/40 hover:bg-amber-600/30 transition font-semibold">锁定 SOXL</button>
+                            <button onclick="selectTickerBySym('SOXL')" class="px-2 py-1 rounded bg-amber-600/20 text-amber-300 border border-amber-600/40 hover:bg-amber-600/30 transition font-semibold">SOXL</button>
+                            <button onclick="selectTickerBySym('^GSPC')" class="px-2 py-1 rounded bg-sky-600/20 text-sky-300 border border-sky-600/40 hover:bg-sky-600/30 transition font-semibold">SPX</button>
+                            <button onclick="selectTickerBySym('NQZ26.CME')" class="px-2 py-1 rounded bg-purple-600/20 text-purple-300 border border-purple-600/40 hover:bg-purple-600/30 transition font-semibold">NQ2612</button>
                             <button id="btn-tf-15m" onclick="changeTimeframe('15m')" class="tf-btn px-2.5 py-1 rounded bg-gray-800 hover:bg-gray-700 text-gray-300">15m</button>
                             <button id="btn-tf-1h" onclick="changeTimeframe('1h')" class="tf-btn px-2.5 py-1 rounded bg-blue-600 text-white font-semibold">1H</button>
                             <button id="btn-tf-4h" onclick="changeTimeframe('4h')" class="tf-btn px-2.5 py-1 rounded bg-gray-800 hover:bg-gray-700 text-gray-300">4H</button>
@@ -178,10 +194,13 @@
                         <pre id="discord-preview" class="bg-[#080b10] text-emerald-300 font-mono text-xs p-2.5 rounded border border-gray-800 overflow-x-auto leading-relaxed select-all">正在同步实时点位...</pre>
                     </div>
                     <div class="flex sm:flex-col gap-2 w-full sm:w-auto">
-                        <button onclick="copyDiscordBlock()" class="flex-1 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg transition whitespace-nowrap">
+                        <button onclick="copyDiscordBlock()" class="flex-1 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg transition whitespace-nowrap">
                             📋 复制当前标的卡片
                         </button>
-                        <button onclick="copyAllPinned()" class="flex-1 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-200 text-xs rounded-lg border border-gray-700 transition whitespace-nowrap">
+                        <button onclick="copyAllIndexes()" class="flex-1 px-4 py-2 bg-sky-700 hover:bg-sky-600 text-white text-xs font-semibold rounded-lg transition whitespace-nowrap">
+                            🌐 复制置顶大盘指数包
+                        </button>
+                        <button onclick="copyAllPinned()" class="flex-1 px-4 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-200 text-xs rounded-lg border border-gray-700 transition whitespace-nowrap">
                             📑 复制置顶3X汇总包
                         </button>
                     </div>
@@ -210,30 +229,56 @@
             document.getElementById('auth-overlay').classList.add('hidden');
         }
 
-        // -------------------- 4.2 五大梯队定义与最新真实基准价 (2026-11-05 校准) --------------------
+        // -------------------- 4.2 六大梯队定义与双置顶栏配置 --------------------
         const _FACTOR_Y_REAL = atob("U1BMVg=="); // SPLV 动态解码，零明文
+
+        // 置顶一：3X 多空决战台
+        const PINNED_3X_SYMS = ['SOXL', 'SOXS', 'TQQQ', 'SQQQ'];
+        // 置顶二：核心大盘指数与主连期货总览台 (SOXX, QQQ, SPY, SPX标普500指数, VOO, NQMAIN 2612纳指期货)
+        const PINNED_INDEX_SYMS = ['SOXX', 'QQQ', 'SPY', '^GSPC', 'VOO', 'NQZ26.CME'];
 
         const SECTOR_CONFIG = {
             "👑 置顶3X多空": ['SOXL', 'SOXS', 'TQQQ', 'SQQQ'],
-            "⚡ 第二梯队重点池": ['SPY', 'MRVL', 'LITE', 'BE', 'SOXL', 'TQQQ', 'MRNA', 'PLTR', 'MSFT', 'NOW', 'COHR', 'AXTI', 'CRCL', 'SPCX', 'NBIS'],
-            "💾 第三梯队芯片存储": ['SOXX', 'NVDA', 'AVGO', 'TSM', 'ASML', 'AMD', 'ARM', 'INTC', 'MU', 'STX', 'WDC', 'SNDK'],
-            "☁️ 第四梯队科技加密": ['QQQ', 'BTC-USD', 'MSTR', 'AAPL', 'GOOG', 'AMZN', 'META', 'TSLA', 'ORCL', 'DELL', 'CRWV', 'ALAB'],
-            "🛡️ 第五梯队因子Y防御": [_FACTOR_Y_REAL, 'KO', 'SCHD', 'GLD', 'GDX', 'VST', 'NLR']
+            "🌐 置顶大盘与期货": ['SOXX', 'QQQ', 'SPY', '^GSPC', 'VOO', 'NQZ26.CME'],
+            "⚡ 核心高弹性池": ['SPY', 'VOO', '^GSPC', 'NQZ26.CME', 'MRVL', 'LITE', 'BE', 'SOXL', 'TQQQ', 'MRNA', 'PLTR', 'MSFT', 'NOW', 'COHR', 'AXTI', 'CRCL', 'SPCX', 'NBIS'],
+            "💾 芯片与存储硬件": ['SOXX', 'NVDA', 'AVGO', 'TSM', 'ASML', 'AMD', 'ARM', 'INTC', 'MU', 'STX', 'WDC', 'SNDK'],
+            "☁️ 科技巨头与加密": ['QQQ', 'BTC-USD', 'MSTR', 'AAPL', 'GOOG', 'AMZN', 'META', 'TSLA', 'ORCL', 'DELL', 'CRWV', 'ALAB'],
+            "🛡️ 因子Y与宏观防御": [_FACTOR_Y_REAL, 'KO', 'SCHD', 'GLD', 'GDX', 'VST', 'NLR']
         };
 
         const DISPLAY_NAME = {
             [_FACTOR_Y_REAL]: "Y",
+            "^GSPC": "SPX(标普500)",
+            "VOO": "VOO(标普ETF)",
+            "NQZ26.CME": "NQMAIN(2612)",
             "BTC-USD": "BTC",
             "STX": "STX(希捷)"
         };
 
-        // 2026-11-05 最新校准真实基准价格池（当离线或代理限流时确保点位100%贴合当前真实盘面）
+        // Discord 手机端零折行短名（严格控制 ≤28 字符）
+        const SHORT_NAME = {
+            [_FACTOR_Y_REAL]: "Y",
+            "^GSPC": "SPX",
+            "VOO": "VOO",
+            "NQZ26.CME": "NQ2612",
+            "BTC-USD": "BTC",
+            "STX": "STX"
+        };
+
+        // 2026-11-06 最新实盘校准基准价格池
         const FALLBACK_QUOTES = {
-            "SOXL": { spot: 66.67, dense: 63.80, sup: 64.90, res: 69.50, tag: "⚡4H超卖", rsi: 37.5 },
+            "SOXL": { spot: 45.97, dense: 40.10, sup: 40.59, res: 68.55, tag: "🔥双周期见底", rsi: 31.3 },
             "SOXS": { spot: 12.85, dense: 12.10, sup: 12.35, res: 13.45, tag: "📡4H阻力", rsi: 62.4 },
             "TQQQ": { spot: 88.40, dense: 84.90, sup: 86.20, res: 91.50, tag: "安全持股", rsi: 48.2 },
             "SQQQ": { spot: 17.65, dense: 16.90, sup: 17.15, res: 18.30, tag: "观望运行", rsi: 51.0 },
-            "SPY":  { spot: 582.30, dense: 575.40, sup: 577.80, res: 586.90, tag: "安全持股", rsi: 52.1 },
+            // 新增与置顶大盘指数及期货主连 2612
+            "SOXX": { spot: 476.50, dense: 468.00, sup: 471.20, res: 503.20, tag: "🔥双周期见底", rsi: 34.8 },
+            "QQQ":  { spot: 647.05, dense: 642.50, sup: 644.80, res: 676.30, tag: "💎日线底部", rsi: 36.5 },
+            "SPY":  { spot: 733.00, dense: 720.70, sup: 726.50, res: 738.80, tag: "安全持股", rsi: 46.2 },
+            "^GSPC": { spot: 7332.40, dense: 7210.00, sup: 7268.00, res: 7390.00, tag: "安全持股", rsi: 46.2 },
+            "VOO":  { spot: 672.80, dense: 661.50, sup: 666.80, res: 678.50, tag: "安全持股", rsi: 46.1 },
+            "NQZ26.CME": { spot: 26685.00, dense: 26420.00, sup: 26510.00, res: 27850.00, tag: "💎日线底部", rsi: 36.8 },
+            // 其余核心池
             "MRVL": { spot: 86.20, dense: 82.50, sup: 83.80, res: 89.40, tag: "安全持股", rsi: 54.3 },
             "LITE": { spot: 68.40, dense: 65.20, sup: 66.10, res: 71.00, tag: "💎日线底部", rsi: 39.8 },
             "BE":   { spot: 23.10, dense: 21.80, sup: 22.20, res: 24.50, tag: "安全持股", rsi: 50.4 },
@@ -246,7 +291,6 @@
             "CRCL": { spot: 81.74, dense: 77.93, sup: 78.60, res: 84.20, tag: "安全持股", rsi: 51.2 },
             "SPCX": { spot: 26.40, dense: 25.80, sup: 25.95, res: 27.10, tag: "观望运行", rsi: 47.0 },
             "NBIS": { spot: 31.80, dense: 29.90, sup: 30.40, res: 33.60, tag: "💎日线底部", rsi: 38.4 },
-            "SOXX": { spot: 476.50, dense: 468.00, sup: 471.20, res: 486.00, tag: "⚡4H超卖", rsi: 38.9 },
             "NVDA": { spot: 198.60, dense: 191.50, sup: 194.00, res: 205.50, tag: "安全持股", rsi: 46.5 },
             "AVGO": { spot: 174.20, dense: 168.50, sup: 170.20, res: 179.80, tag: "安全持股", rsi: 48.0 },
             "TSM":  { spot: 192.40, dense: 185.80, sup: 188.00, res: 198.50, tag: "安全持股", rsi: 50.1 },
@@ -258,7 +302,6 @@
             "STX":  { spot: 101.80, dense: 97.90, sup: 99.10, res: 105.50, tag: "💎日线底部", rsi: 40.5 },
             "WDC":  { spot: 67.40, dense: 64.50, sup: 65.40, res: 70.20, tag: "安全持股", rsi: 45.8 },
             "SNDK": { spot: 54.20, dense: 51.60, sup: 52.40, res: 56.80, tag: "安全持股", rsi: 47.1 },
-            "QQQ":  { spot: 496.80, dense: 489.20, sup: 491.50, res: 504.00, tag: "安全持股", rsi: 49.0 },
             "BTC-USD": { spot: 79835, dense: 77800, sup: 78500, res: 81600, tag: "安全持股", rsi: 53.5 },
             "MSTR": { spot: 248.00, dense: 235.00, sup: 239.50, res: 262.00, tag: "安全持股", rsi: 54.0 },
             "AAPL": { spot: 228.40, dense: 223.00, sup: 224.80, res: 233.50, tag: "安全持股", rsi: 48.5 },
@@ -279,23 +322,28 @@
             "NLR":  { spot: 86.20, dense: 83.40, sup: 84.20, res: 88.90, tag: "安全持股", rsi: 50.8 }
         };
 
-        // 实时解算缓存池
         const quotesMap = {};
         const klineCache = {};
 
-        let currentSector = "⚡ 第二梯队重点池";
+        let currentSector = "🌐 置顶大盘与期货";
         let currentRawSym = "SOXL";
         let currentTimeframe = "1h";
 
         // -------------------- 4.3 格式化与 Fioni 空间矩阵解算函数 --------------------
         function fmtPrice(val, sym) {
             if (val === undefined || val === null || isNaN(val)) return "$--";
-            if (sym && sym.includes("BTC")) return "$" + Math.round(val).toLocaleString('en-US');
+            if (sym && (sym.includes("BTC") || sym.includes("NQ") || sym === "^GSPC")) {
+                return "$" + Number(val).toFixed(1);
+            }
             return "$" + Number(val).toFixed(2);
         }
 
         function getDisplayName(rawSym) {
             return DISPLAY_NAME[rawSym] || rawSym;
+        }
+
+        function getShortName(rawSym) {
+            return SHORT_NAME[rawSym] || rawSym;
         }
 
         function computeRSI(closes, period = 14) {
@@ -317,18 +365,15 @@
             return 100.0 - (100.0 / (1.0 + rs));
         }
 
-        // 根据 K 线数组实时解算：现价、1H支撑、1H压力、技术性成交密集区
         function calculateFioniLevels(bars, rawSym) {
             const sub = bars.slice(-60);
             const closes = sub.map(b => b.close);
             const highs = sub.map(b => b.high);
             const lows = sub.map(b => b.low);
-            const vols = sub.map(b => b.volume || 1);
 
             const spot = closes[closes.length - 1];
             const rsi = computeRSI(closes, 14);
 
-            // 近20根高低点与布林上下轨
             const recent20 = sub.slice(-20);
             const mean20 = recent20.reduce((a, b) => a + b.close, 0) / recent20.length;
             const std20 = Math.sqrt(recent20.reduce((a, b) => a + Math.pow(b.close - mean20, 2), 0) / recent20.length) || (spot * 0.015);
@@ -338,7 +383,6 @@
             const swingLow = Math.min(...recent20.map(b => b.low));
             const swingHigh = Math.max(...recent20.map(b => b.high));
 
-            // 24档量价分布矩阵 (POC / VAL / VAH)
             const lowMin = Math.min(...lows);
             const highMax = Math.max(...highs);
             const bins = 24;
@@ -372,7 +416,6 @@
             if (sup >= spot) sup = spot * 0.982;
             if (res <= spot) res = spot * 1.018;
 
-            // 技术性成交密集区（位于下方多重支撑与筹码密集下沿共振处）
             let dense = Math.min(spot * 0.99, 0.45 * sup + 0.35 * valPrice + 0.20 * swingLow);
             if (dense >= sup) dense = sup * 0.988;
 
@@ -392,7 +435,6 @@
             };
         }
 
-        // 初始化基准数据到 quotesMap
         function initBaselineQuotes() {
             Object.keys(FALLBACK_QUOTES).forEach(sym => {
                 quotesMap[sym] = { ...FALLBACK_QUOTES[sym] };
@@ -447,17 +489,14 @@
             });
         }
 
-        // 在 K 线图上直接画出：1H压力位、1H支撑位、技术性成交密集区
         function drawKeyLevelsOnChart(q, rawSym) {
             if (!candleSeries || !q) return;
 
-            // 清除旧的画线
             activePriceLines.forEach(line => {
                 try { candleSeries.removePriceLine(line); } catch (e) {}
             });
             activePriceLines = [];
 
-            // 1. 红色虚线：1H 压力位
             const resLine = candleSeries.createPriceLine({
                 price: q.res,
                 color: '#f87171',
@@ -467,7 +506,6 @@
                 title: `🚨 1H压力位 ${fmtPrice(q.res, rawSym)}`
             });
 
-            // 2. 蓝色虚线：1H 支撑位
             const supLine = candleSeries.createPriceLine({
                 price: q.sup,
                 color: '#38bdf8',
@@ -477,7 +515,6 @@
                 title: `🛡️ 1H支撑位 ${fmtPrice(q.sup, rawSym)}`
             });
 
-            // 3. 翠绿色粗实线：技术性成交密集区
             const denseLine = candleSeries.createPriceLine({
                 price: q.dense,
                 color: '#10b981',
@@ -489,7 +526,6 @@
 
             activePriceLines.push(resLine, supLine, denseLine);
 
-            // 同步更新图表上方图例栏
             document.getElementById('legend-spot').innerText = fmtPrice(q.spot, rawSym);
             document.getElementById('legend-res').innerText = fmtPrice(q.res, rawSym);
             document.getElementById('legend-sup').innerText = fmtPrice(q.sup, rawSym);
@@ -498,7 +534,6 @@
             document.getElementById('chart-sig-badge').innerText = q.tag;
         }
 
-        // 生成与真实价格 100% 对齐的高拟真 K 线序列（当浏览器跨域受限或离线时无缝兜底）
         function generateRealisticKlines(q, tf) {
             const count = 90;
             const nowSec = Math.floor(Date.now() / 1000);
@@ -509,7 +544,6 @@
             const volScale = (q.res - q.dense) * 0.12 || (q.spot * 0.008);
             const revWalk = [price];
 
-            // 从当前真实价格反向推演历史路径，确保最后一根 K 线收盘价 100% 等于实时现价 q.spot
             let seed = Math.round(q.spot * 100);
             function pseudoRand() {
                 seed = (seed * 9301 + 49297) % 233280;
@@ -542,81 +576,78 @@
             return bars;
         }
 
-        // 通过多通道 CORS 代理拉取 Yahoo Finance 真实 K 线并实时解算点位
+        // 支持 NQZ26.CME 自动回退 NQ=F 连续合约代码
         async function fetchRealYahooKlines(rawSym, tf = '1h') {
             const yfInterval = tf === '4h' ? '1h' : tf;
             const yfRange = tf === '15m' ? '5d' : (tf === '1d' ? '6mo' : '1mo');
-            const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(rawSym)}?interval=${yfInterval}&range=${yfRange}`;
-            
-            const proxies = [
-                `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`,
-                `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`
-            ];
+            const candidateSyms = rawSym === 'NQZ26.CME' ? ['NQZ26.CME', 'NQ=F'] : [rawSym];
 
-            for (const proxyUrl of proxies) {
-                try {
-                    const controller = new AbortController();
-                    const timer = setTimeout(() => controller.abort(), 4500);
-                    const resp = await fetch(proxyUrl, { signal: controller.signal });
-                    clearTimeout(timer);
-                    if (!resp.ok) continue;
-                    const data = await resp.json();
-                    const res = data?.chart?.result?.[0];
-                    if (!res || !res.timestamp) continue;
+            for (const querySym of candidateSyms) {
+                const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(querySym)}?interval=${yfInterval}&range=${yfRange}`;
+                const proxies = [
+                    `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`,
+                    `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`
+                ];
 
-                    const ts = res.timestamp;
-                    const q = res.indicators.quote[0];
-                    let bars = [];
-                    for (let i = 0; i < ts.length; i++) {
-                        if (q.open[i] != null && q.close[i] != null && q.high[i] != null && q.low[i] != null) {
-                            bars.push({
-                                time: ts[i],
-                                open: Number(q.open[i].toFixed(2)),
-                                high: Number(q.high[i].toFixed(2)),
-                                low: Number(q.low[i].toFixed(2)),
-                                close: Number(q.close[i].toFixed(2)),
-                                volume: q.volume[i] || 0
-                            });
+                for (const proxyUrl of proxies) {
+                    try {
+                        const controller = new AbortController();
+                        const timer = setTimeout(() => controller.abort(), 4500);
+                        const resp = await fetch(proxyUrl, { signal: controller.signal });
+                        clearTimeout(timer);
+                        if (!resp.ok) continue;
+                        const data = await resp.json();
+                        const res = data?.chart?.result?.[0];
+                        if (!res || !res.timestamp) continue;
+
+                        const ts = res.timestamp;
+                        const q = res.indicators.quote[0];
+                        let bars = [];
+                        for (let i = 0; i < ts.length; i++) {
+                            if (q.open[i] != null && q.close[i] != null && q.high[i] != null && q.low[i] != null) {
+                                bars.push({
+                                    time: ts[i],
+                                    open: Number(q.open[i].toFixed(2)),
+                                    high: Number(q.high[i].toFixed(2)),
+                                    low: Number(q.low[i].toFixed(2)),
+                                    close: Number(q.close[i].toFixed(2)),
+                                    volume: q.volume[i] || 0
+                                });
+                            }
                         }
-                    }
 
-                    // 如果请求的是 4h，由 1h 聚合
-                    if (tf === '4h' && bars.length >= 8) {
-                        const agg = [];
-                        for (let i = 0; i < bars.length; i += 4) {
-                            const slice = bars.slice(i, i + 4);
-                            agg.push({
-                                time: slice[0].time,
-                                open: slice[0].open,
-                                high: Math.max(...slice.map(s => s.high)),
-                                low: Math.min(...slice.map(s => s.low)),
-                                close: slice[slice.length - 1].close,
-                                volume: slice.reduce((a, b) => a + b.volume, 0)
-                            });
+                        if (tf === '4h' && bars.length >= 8) {
+                            const agg = [];
+                            for (let i = 0; i < bars.length; i += 4) {
+                                const slice = bars.slice(i, i + 4);
+                                agg.push({
+                                    time: slice[0].time,
+                                    open: slice[0].open,
+                                    high: Math.max(...slice.map(s => s.high)),
+                                    low: Math.min(...slice.map(s => s.low)),
+                                    close: slice[slice.length - 1].close,
+                                    volume: slice.reduce((a, b) => a + b.volume, 0)
+                                });
+                            }
+                            bars = agg;
                         }
-                        bars = agg;
-                    }
 
-                    if (bars.length > 15) return bars;
-                } catch (err) {
-                    // 尝试下一个代理
+                        if (bars.length > 15) return bars;
+                    } catch (err) {}
                 }
             }
             return null;
         }
 
-        // 加载指定标的的 K 线 + 标注三道关键线
         async function loadSymbolChartAndLevels(rawSym, tf = currentTimeframe) {
             currentRawSym = rawSym;
             currentTimeframe = tf;
 
             const dispName = getDisplayName(rawSym);
-            // 若点击因子 Y，标题加密保护
             const titleLabel = dispName === 'Y' ? '因子Y (已保密脱敏)' : dispName;
             document.getElementById('chart-title').innerText = `📈 ${titleLabel} 量化画线 K 线终端 (${tf.toUpperCase()})`;
             document.getElementById('chart-loading').classList.remove('hidden');
 
-            // 高亮当前周期按钮
             document.querySelectorAll('.tf-btn').forEach(btn => {
                 btn.className = "tf-btn px-2.5 py-1 rounded bg-gray-800 hover:bg-gray-700 text-gray-300";
             });
@@ -630,7 +661,6 @@
                 bars = await fetchRealYahooKlines(rawSym, tf);
                 if (bars && bars.length > 15) {
                     klineCache[cacheKey] = bars;
-                    // 用真实拉取到的 K 线同步更新左侧卡片点位，彻底解决左右价格不一致！
                     const liveCalc = calculateFioniLevels(bars, rawSym);
                     quotesMap[rawSym] = liveCalc;
                     const nowStr = new Date().toLocaleTimeString('zh-CN', { hour12: false });
@@ -662,23 +692,20 @@
         }
 
         function updateDiscordPreview(rawSym) {
-            const disp = getDisplayName(rawSym);
+            const disp = getShortName(rawSym);
             const q = quotesMap[rawSym] || FALLBACK_QUOTES[rawSym];
             if (!q) return;
-            document.getElementById('selected-sym-label').innerText = "当前选中: " + disp;
-            const block = `${disp.padEnd(6, ' ')} 现:${fmtPrice(q.spot, rawSym)} [${q.tag}]
-技术性成交密集区: ${fmtPrice(q.dense, rawSym)}
-1H撑:${fmtPrice(q.sup, rawSym).padEnd(7, ' ')} | 1H压:${fmtPrice(q.res, rawSym)}`;
+            document.getElementById('selected-sym-label').innerText = "当前选中: " + getDisplayName(rawSym);
+            const block = `${disp.padEnd(6, ' ')} 现:${fmtPrice(q.spot, rawSym)} [${q.tag}]\n技术性成交密集区: ${fmtPrice(q.dense, rawSym)}\n1H撑:${fmtPrice(q.sup, rawSym).padEnd(7, ' ')} | 1H压:${fmtPrice(q.res, rawSym)}`;
             document.getElementById('discord-preview').innerText = block;
         }
 
-        // -------------------- 4.5 渲染左侧置顶矩阵、共振引擎与五大梯队 --------------------
+        // -------------------- 4.5 渲染置顶一(3X)、置顶二(大盘指数与期货)、共振区与六大梯队 --------------------
         function renderAllCards() {
-            // 1. 置顶 4 大金刚
-            const pinnedSyms = ['SOXL', 'SOXS', 'TQQQ', 'SQQQ'];
+            // 1. 置顶一：3X 多空 4 大金刚
             const pGrid = document.getElementById('pinned-grid');
-            pGrid.innerHTML = pinnedSyms.map(sym => {
-                const q = quotesMap[sym];
+            pGrid.innerHTML = PINNED_3X_SYMS.map(sym => {
+                const q = quotesMap[sym] || FALLBACK_QUOTES[sym];
                 const isActive = currentRawSym === sym ? 'card-active' : '';
                 return `
                 <div onclick="selectTickerBySym('${sym}')"
@@ -698,7 +725,31 @@
                 </div>`;
             }).join('');
 
-            // 2. 动态解算三大共振状态
+            // 2. 置顶二：核心大盘指数与期货总览台 (SOXX, QQQ, SPY, SPX, VOO, NQMAIN 2612)
+            const idxGrid = document.getElementById('index-pinned-grid');
+            idxGrid.innerHTML = PINNED_INDEX_SYMS.map(sym => {
+                const q = quotesMap[sym] || FALLBACK_QUOTES[sym];
+                const disp = getDisplayName(sym);
+                const isActive = currentRawSym === sym ? 'card-active' : '';
+                return `
+                <div onclick="selectTickerBySym('${sym}')"
+                    class="bg-[#0b0e14] p-3 rounded-xl border border-gray-800 card-hover ${isActive} cursor-pointer transition flex flex-col justify-between">
+                    <div class="flex justify-between items-center gap-1">
+                        <span class="font-bold text-sky-300 text-xs truncate">${disp}</span>
+                        <span class="text-[10px] px-1.5 py-0.5 rounded bg-gray-800 text-emerald-300 whitespace-nowrap">${q.tag}</span>
+                    </div>
+                    <div class="my-1.5">
+                        <div class="text-base font-bold font-mono text-white">${fmtPrice(q.spot, sym)}</div>
+                        <div class="text-[11px] text-emerald-400 font-mono mt-0.5">密集区: ${fmtPrice(q.dense, sym)}</div>
+                    </div>
+                    <div class="text-[10px] text-gray-400 font-mono border-t border-gray-800/80 pt-1 flex justify-between">
+                        <span class="text-sky-400">撑:${fmtPrice(q.sup, sym)}</span>
+                        <span class="text-red-400">压:${fmtPrice(q.res, sym)}</span>
+                    </div>
+                </div>`;
+            }).join('');
+
+            // 3. 动态解算三大共振状态
             const soxl = quotesMap['SOXL'];
             const soxs = quotesMap['SOXS'];
             const tqqq = quotesMap['TQQQ'];
@@ -724,7 +775,7 @@
                 </div>
             `;
 
-            // 3. 梯队 Tabs
+            // 4. 梯队 Tabs
             const tabsEl = document.getElementById('sector-tabs');
             tabsEl.innerHTML = Object.keys(SECTOR_CONFIG).map(sec => `
                 <button onclick="switchSector('${sec}')" 
@@ -772,22 +823,24 @@
 
         // -------------------- 4.6 后台批量同步置顶核心与云端 JSON --------------------
         async function refreshLiveAll() {
-            document.getElementById('sync-status').innerText = "🔄 正在拉取最新美股盘面...";
+            document.getElementById('sync-status').innerText = "🔄 正在拉取最新美股与期货盘面...";
             delete klineCache[`${currentRawSym}_${currentTimeframe}`];
 
-            // 1. 优先尝试读取同目录下的 fioni_data.json（如果配置了 GitHub Actions 自动生成）
+            // 1. 优先读取同目录下的 fioni_data.json
             try {
                 const resp = await fetch('./fioni_data.json?t=' + Date.now());
                 if (resp.ok) {
                     const cloud = await resp.json();
                     if (cloud && cloud.quotes) {
                         Object.assign(quotesMap, cloud.quotes);
+                        document.getElementById('sync-status').innerText = `🟢 云端同步: ${cloud.updated_at || '最新'}`;
+                        document.getElementById('sync-status').className = "text-[11px] px-2.5 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 font-mono";
                     }
                 }
             } catch (e) {}
 
-            // 2. 并发刷新置顶 4 大金刚与当前选中标的的实时 Yahoo K 线
-            const prioritySyms = Array.from(new Set(['SOXL', 'SOXS', 'TQQQ', 'SQQQ', currentRawSym]));
+            // 2. 并发刷新置顶 3X + 置顶大盘指数期货
+            const prioritySyms = Array.from(new Set([...PINNED_3X_SYMS, ...PINNED_INDEX_SYMS, currentRawSym]));
             await Promise.all(prioritySyms.map(async (sym) => {
                 const bars = await fetchRealYahooKlines(sym, '1h');
                 if (bars && bars.length > 15) {
@@ -806,12 +859,22 @@
         }
 
         function copyAllPinned() {
-            const lines = ['SOXL', 'SOXS', 'TQQQ', 'SQQQ'].map(sym => {
+            const lines = PINNED_3X_SYMS.map(sym => {
                 const q = quotesMap[sym];
                 return `${sym.padEnd(5, ' ')} 现:${fmtPrice(q.spot, sym)} [${q.tag}]\n技术性成交密集区: ${fmtPrice(q.dense, sym)}\n1H撑:${fmtPrice(q.sup, sym)} | 1H压:${fmtPrice(q.res, sym)}`;
             }).join("\n----------------------------\n");
-            navigator.clipboard.writeText("👑 **【置顶】3X多空杠杆决战台**\n```text\n" + lines + "\n```");
+            navigator.clipboard.writeText("👑 **【置顶一】3X多空杠杆决战台**\n```text\n" + lines + "\n```");
             alert("✅ 已复制置顶 3X 汇总信号包！");
+        }
+
+        function copyAllIndexes() {
+            const lines = PINNED_INDEX_SYMS.map(sym => {
+                const q = quotesMap[sym];
+                const shortDisp = getShortName(sym);
+                return `${shortDisp.padEnd(6, ' ')} 现:${fmtPrice(q.spot, sym)} [${q.tag}]\n技术性成交密集区: ${fmtPrice(q.dense, sym)}\n1H撑:${fmtPrice(q.sup, sym)} | 1H压:${fmtPrice(q.res, sym)}`;
+            }).join("\n----------------------------\n");
+            navigator.clipboard.writeText("🌐 **【置顶二】核心大盘指数与主连期货**\n```text\n" + lines + "\n```");
+            alert("✅ 已复制置顶大盘指数与期货汇总包！");
         }
 
         // -------------------- 4.7 双时区战略时钟 --------------------
