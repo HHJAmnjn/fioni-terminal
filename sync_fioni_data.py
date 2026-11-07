@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-菲欧尼之心 · 云端数据全量同步引擎 (v4.0 含 SPX / VOO / NQMAIN 2612 期货主连)
+菲欧尼之心 · 云端全量真实 K 线与点位同步引擎 (v8.0)
+同时导出全市场 quotes 点位 + 核心标的真实 K 线序列 (klines)，前端零跨域 0.1 秒直读
 """
-import os
 import json
 import base64
 import math
@@ -13,7 +13,6 @@ import numpy as np
 import pandas as pd
 import yfinance as yf
 
-# 敏感标的（SPLV）Base64 动态脱敏，源码不留明文
 _FACTOR_Y_REAL = base64.b64decode("U1BMVg==").decode("utf-8")
 
 SECTOR_CONFIG = {
@@ -38,8 +37,24 @@ def compute_rsi(series: pd.Series, period: int = 14) -> float:
     rs = avg_gain.iloc[-1] / (avg_loss.iloc[-1] + 1e-9)
     return float(100.0 - (100.0 / (1.0 + rs)))
 
-def calculate_fioni_levels(df_1h: pd.DataFrame, sym: str) -> dict:
-    sub = df_1h.tail(60).copy()
+def df_to_bars(df: pd.DataFrame) -> list:
+    bars = []
+    for ts, row in df.iterrows():
+        c = float(row['close'])
+        if math.isnan(c) or c <= 0:
+            continue
+        bars.append({
+            "time": int(ts.timestamp()),
+            "open": round(float(row['open']), 2),
+            "high": round(float(row['high']), 2),
+            "low": round(float(row['low']), 2),
+            "close": round(c, 2),
+            "volume": int(row['volume']) if not math.isnan(row['volume']) else 0
+        })
+    return bars
+
+def calculate_fioni_levels(df: pd.DataFrame) -> dict:
+    sub = df.tail(60).copy()
     spot = float(sub['close'].iloc[-1])
     rsi = compute_rsi(sub['close'], 14)
 
@@ -64,7 +79,7 @@ def calculate_fioni_levels(df_1h: pd.DataFrame, sym: str) -> dict:
     v_arr = sub['volume'].values
     idx = np.clip(np.digitize(typ, edges) - 1, 0, bins - 1)
     for i, v in zip(idx, v_arr):
-        vols[i] += float(v) if v > 0 else 1.0  # 兼容 SPX 指数无成交量时按等权价格分布计算
+        vols[i] += float(v) if v > 0 else 1.0
 
     poc_idx = int(np.argmax(vols))
     tot_vol = vols.sum() if vols.sum() > 0 else 1.0
@@ -90,7 +105,7 @@ def calculate_fioni_levels(df_1h: pd.DataFrame, sym: str) -> dict:
     if res <= spot:
         res = spot * 1.018
 
-    dense = min(spot * 0.99, 0.45 * sup + 0.35 * val_price + 0.20 * swing_low)
+    dense = min(spot * 0.99, 0.45 * sup + 0.35 * val_price + 0.20 * swingLow if 'swingLow' in locals() else swing_low)
     if dense >= sup:
         dense = sup * 0.988
 
@@ -110,48 +125,49 @@ def calculate_fioni_levels(df_1h: pd.DataFrame, sym: str) -> dict:
         "sup": round(sup, 2),
         "res": round(res, 2),
         "rsi": round(rsi, 1),
-        "tag": tag
+        "tag": tag,
+        "isReal": True
     }
 
 def fetch_single_ticker(sym: str):
-    # 若为纳指100期货主连2612，优先抓取 NQZ26.CME，若数据源需要连续合约名则自动回退 NQ=F
-    candidates = ['NQZ26.CME', 'NQ=F'] if sym == 'NQZ26.CME' else [sym]
+    candidates = ['NQ=F', 'NQZ26.CME'] if sym == 'NQZ26.CME' else [sym]
     for query_sym in candidates:
         try:
             tk = yf.Ticker(query_sym)
-            df_1h = tk.history(period="1mo", interval="1h")
+            df_1h = tk.history(period="2mo", interval="1h")
+            df_1d = tk.history(period="6mo", interval="1d")
             if df_1h is not None and not df_1h.empty and len(df_1h) >= 15:
                 df_1h.columns = [str(c).lower() for c in df_1h.columns]
-                levels = calculate_fioni_levels(df_1h, sym)
-                return sym, levels
+                levels = calculate_fioni_levels(df_1h)
+                bars_1h = df_to_bars(df_1h.tail(120))
+                bars_1d = []
+                if df_1d is not None and not df_1d.empty:
+                    df_1d.columns = [str(c).lower() for c in df_1d.columns]
+                    bars_1d = df_to_bars(df_1d.tail(120))
+                return sym, levels, bars_1h, bars_1d
         except Exception:
             continue
     return None
 
 def main():
     bj_time = (datetime.now(timezone.utc) + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M:%S")
-    print(f"[*] 启动全市场标的行情与量化矩阵同步 (北京时间: {bj_time})...")
-
     quotes = {}
-    with ThreadPoolExecutor(max_workers=8) as executor:
+    klines = {}
+
+    with ThreadPoolExecutor(max_workers=6) as executor:
         futures = {executor.submit(fetch_single_ticker, sym): sym for sym in ALL_TICKERS}
         for f in as_completed(futures):
             res = f.result()
             if res:
-                sym, data = res
-                quotes[sym] = data
-
-    print(f"[+] 成功抓取并解算 {len(quotes)}/{len(ALL_TICKERS)} 支标的真实数据")
-
-    export_payload = {
-        "updated_at": bj_time,
-        "quotes": quotes
-    }
+                sym, levels, bars_1h, bars_1d = res
+                quotes[sym] = levels
+                if bars_1h:
+                    klines[f"{sym}_1h"] = bars_1h
+                if bars_1d:
+                    klines[f"{sym}_1d"] = bars_1d
 
     with open("fioni_data.json", "w", encoding="utf-8") as f:
-        json.dump(export_payload, f, ensure_ascii=False, indent=2)
-
-    print("[✓] 成功写入 fioni_data.json！")
+        json.dump({"updated_at": bj_time, "quotes": quotes, "klines": klines}, f, ensure_ascii=False)
 
 if __name__ == "__main__":
     main()
