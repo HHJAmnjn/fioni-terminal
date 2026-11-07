@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>菲欧尼之心 (Heart of Fioni) · 私有量化巡航终端 v6.0</title>
+    <title>菲欧尼之心 (Heart of Fioni) · 私有量化巡航终端 v8.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
     <style>
@@ -20,15 +20,13 @@
 </head>
 <body class="min-h-screen flex flex-col select-none">
 
-    <!-- ==================== 1. 科技感暗黑密码锁屏层 ==================== -->
+    <!-- ==================== 1. 密码网关 ==================== -->
     <div id="auth-overlay" class="fixed inset-0 z-50 bg-[#05070b]/95 backdrop-blur-md flex items-center justify-center p-4">
         <div class="card-bg rounded-2xl p-8 max-w-md w-full border border-gray-800 shadow-2xl text-center space-y-5">
-            <div class="w-14 h-14 mx-auto rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-2xl">
-                🔐
-            </div>
+            <div class="w-14 h-14 mx-auto rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-2xl">🔐</div>
             <div>
                 <h2 class="text-xl font-bold text-white tracking-wider">菲欧尼之心 · 私有量化终端</h2>
-                <p class="text-xs text-gray-400 mt-1">Fioni Core Spatial Matrix · 授权访问网关 v6.0</p>
+                <p class="text-xs text-gray-400 mt-1">Fioni Core Spatial Matrix · 授权访问网关 v8.0 (纯真实K线版)</p>
             </div>
             <div class="space-y-3">
                 <input id="pwd-input" type="password" placeholder="请输入终端访问授权码..." 
@@ -43,16 +41,16 @@
         </div>
     </div>
 
-    <!-- ==================== 2. 顶部战略导航与双时区时钟 ==================== -->
+    <!-- ==================== 2. 顶部战略时钟 ==================== -->
     <header class="card-bg border-b border-gray-800/80 px-4 lg:px-8 py-3 flex flex-wrap justify-between items-center gap-4 sticky top-0 z-30">
         <div class="flex items-center space-x-3">
             <span class="relative flex h-3 w-3">
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
             </span>
-            <h1 class="text-lg font-bold tracking-wider text-white">菲欧尼之心 <span class="text-xs font-mono px-2 py-0.5 bg-emerald-950 text-emerald-400 rounded border border-emerald-800/60 ml-1">FIONI PRO v6.0</span></h1>
-            <span id="sync-status" class="text-[11px] px-2.5 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-800 font-mono">🔄 正在同步行情...</span>
-            <button onclick="refreshLiveAll()" class="text-[11px] px-2.5 py-1 rounded bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 transition">🔄 刷新实时行情</button>
+            <h1 class="text-lg font-bold tracking-wider text-white">菲欧尼之心 <span class="text-xs font-mono px-2 py-0.5 bg-emerald-950 text-emerald-400 rounded border border-emerald-800/60 ml-1">FIONI PRO v8.0</span></h1>
+            <span id="sync-status" class="text-[11px] px-2.5 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-800 font-mono">🔄 正在连接真实行情源...</span>
+            <button onclick="forceRefreshCurrentAndQueue()" class="text-[11px] px-2.5 py-1 rounded bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 transition">🔄 刷新真实行情</button>
         </div>
 
         <div class="flex flex-wrap items-center gap-3 text-xs">
@@ -71,14 +69,14 @@
     <!-- ==================== 3. 主体网格布局 ==================== -->
     <main class="flex-1 p-4 lg:p-6 max-w-[1660px] w-full mx-auto space-y-5">
 
-        <!-- 3.1 置顶一：三大跨板块共振与置顶 3X 决战台 -->
+        <!-- 3.1 置顶一：3X 多空决战台 -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
             <div class="lg:col-span-7 card-bg rounded-xl p-4 glow-emerald">
                 <div class="flex justify-between items-center mb-3">
                     <h2 class="text-sm font-bold text-amber-400 flex items-center gap-1.5">
                         👑 【置顶一】3X 多空杠杆决战台 (SOXL / SOXS / TQQQ / SQQQ)
                     </h2>
-                    <span class="text-[11px] text-gray-400">点击任意卡片即刻切换右侧山形图与关键防线</span>
+                    <span class="text-[11px] text-gray-400">100% 真实行情源驱动 · 点击卡片切换右侧山形图</span>
                 </div>
                 <div id="pinned-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3"></div>
             </div>
@@ -111,7 +109,7 @@
                 <div class="flex justify-between items-center mb-3 pb-2 border-b border-gray-800">
                     <div>
                         <h2 class="text-sm font-bold text-white">⚡ 核心梯队 · 技术性成交密集区</h2>
-                        <p class="text-[11px] text-gray-400 mt-0.5">含 SPX标普指数、VOO、NQMAIN 2612 及全板块核心池</p>
+                        <p class="text-[11px] text-gray-400 mt-0.5">队列式防限流真实数据同步 (<span id="queue-progress" class="text-emerald-400 font-mono">就绪</span>)</p>
                     </div>
                     <input id="search-input" type="text" placeholder="搜索代码..." oninput="renderSectors()"
                         class="px-2.5 py-1 text-xs rounded bg-[#090d14] border border-gray-700 text-white w-28 focus:outline-none focus:border-blue-500" />
@@ -121,20 +119,20 @@
                 <div id="sector-list" class="flex-1 overflow-y-auto space-y-2.5 pr-1"></div>
             </div>
 
-            <!-- 右侧：专业级山形图终端 + 极简 1/2/3 信号图层 + Discord 卡片舱 (7 Cols) -->
+            <!-- 右侧：专业宽屏山形图终端 + 独立副图量能轴 + 1/2/3 极简信号图层 (7 Cols) -->
             <div class="lg:col-span-7 flex flex-col space-y-4 h-[780px]">
                 
-                <!-- 图表主容器 -->
                 <div id="chart-card-container" class="card-bg rounded-xl p-4 flex-1 flex flex-col">
-                    <!-- 第一行：标题 + 快捷标的 + 周期切换 + 视图复位 -->
+                    <!-- 顶部控制栏 -->
                     <div class="flex flex-wrap justify-between items-center gap-2 mb-2">
                         <div class="flex items-center space-x-2">
                             <span class="text-base font-bold text-white" id="chart-title">⛰️ SOXL 量化山形图终端</span>
                             <span id="chart-spot-badge" class="text-xs font-mono bg-emerald-950 text-emerald-300 border border-emerald-800 px-2 py-0.5 rounded font-bold">$--.--</span>
-                            <span id="chart-sig-badge" class="text-xs bg-gray-800 text-amber-300 px-2 py-0.5 rounded">解算中</span>
+                            <span id="chart-sig-badge" class="text-xs bg-gray-800 text-amber-300 px-2 py-0.5 rounded">真实行情</span>
                         </div>
                         <div class="flex flex-wrap items-center gap-1.5 text-xs">
                             <button onclick="selectTickerBySym('SOXL')" class="px-2 py-1 rounded bg-amber-600/20 text-amber-300 border border-amber-600/40 hover:bg-amber-600/30 transition font-semibold">SOXL</button>
+                            <button onclick="selectTickerBySym('SOXX')" class="px-2 py-1 rounded bg-emerald-600/20 text-emerald-300 border border-emerald-600/40 hover:bg-emerald-600/30 transition font-semibold">SOXX</button>
                             <button onclick="selectTickerBySym('^GSPC')" class="px-2 py-1 rounded bg-sky-600/20 text-sky-300 border border-sky-600/40 hover:bg-sky-600/30 transition font-semibold">SPX</button>
                             <button onclick="selectTickerBySym('NQZ26.CME')" class="px-2 py-1 rounded bg-purple-600/20 text-purple-300 border border-purple-600/40 hover:bg-purple-600/30 transition font-semibold">NQ2612</button>
                             <span class="text-gray-700">|</span>
@@ -143,14 +141,14 @@
                             <button id="btn-tf-4h" onclick="changeTimeframe('4h')" class="tf-btn px-2 py-1 rounded bg-blue-600 text-white font-semibold">4H</button>
                             <button id="btn-tf-1d" onclick="changeTimeframe('1d')" class="tf-btn px-2 py-1 rounded bg-gray-800 hover:bg-gray-700 text-gray-300">日K</button>
                             <span class="text-gray-700">|</span>
-                            <button id="btn-chart-mode" onclick="toggleChartStyle()" class="px-2 py-1 rounded bg-emerald-950 text-emerald-300 border border-emerald-800/70 hover:bg-emerald-900 transition" title="切换山形图/蜡烛图">⛰️ 山形图</button>
-                            <button onclick="resetChartZoom()" class="px-2 py-1 rounded bg-gray-800 hover:bg-gray-700 text-gray-300" title="自动缩放适配视图">⟲ 复位</button>
+                            <button id="btn-chart-mode" onclick="toggleChartStyle()" class="px-2 py-1 rounded bg-emerald-950 text-emerald-300 border border-emerald-800/70 hover:bg-emerald-900 transition">⛰️ 山形图</button>
+                            <button onclick="resetChartZoom()" class="px-2 py-1 rounded bg-gray-800 hover:bg-gray-700 text-emerald-400 font-semibold">⟲ 复位</button>
                         </div>
                     </div>
 
-                    <!-- 第二行：保密级 1 / 2 / 3 信号开关栏 (完全隐去指标名称) -->
+                    <!-- 1 / 2 / 3 极简无字信号图层 -->
                     <div class="flex flex-wrap items-center justify-between gap-2 mb-2 px-3 py-1.5 rounded-lg bg-[#090d14] border border-gray-800/90 text-xs">
-                        <div class="flex flex-wrap items-center gap-4">
+                        <div class="flex flex-wrap items-center gap-3">
                             <span class="text-gray-400 font-semibold">🛠️ 信号图层:</span>
                             <label class="flex items-center gap-1.5 cursor-pointer text-white font-mono font-bold bg-gray-800/80 px-2.5 py-0.5 rounded border border-gray-700 hover:border-emerald-500 transition">
                                 <input type="checkbox" id="chk-ind1" checked onchange="refreshIndicatorsOnly()" class="accent-emerald-500 rounded" />
@@ -164,12 +162,12 @@
                                 <input type="checkbox" id="chk-ind3" checked onchange="refreshIndicatorsOnly()" class="accent-emerald-500 rounded" />
                                 <span>3</span>
                             </label>
-                            <span class="text-[11px] text-gray-400 hidden sm:inline">（仅保留 1 号强支撑/强压力实线轨）</span>
+                            <span class="text-[11px] text-gray-400">（已移除模拟波形，100% 校验 Yahoo 原始 K 线）</span>
                         </div>
-                        <span id="ind-active-summary" class="text-emerald-400 font-mono text-[11px]">信号统计: 1(0) | 2(0) | 3(0)</span>
+                        <span id="ind-active-summary" class="text-emerald-400 font-mono text-[11px]">信号: 1(0) | 2(0) | 3(0)</span>
                     </div>
 
-                    <!-- 第三行：图表上方实时点位图例栏 -->
+                    <!-- 点位图例栏 -->
                     <div class="grid grid-cols-2 sm:grid-cols-6 gap-1.5 mb-2 bg-[#090d14] p-2 rounded-lg border border-gray-800/90 text-[11px] font-mono">
                         <div class="flex items-center justify-between px-1.5 border-r border-gray-800">
                             <span class="text-gray-400">现价:</span>
@@ -184,11 +182,11 @@
                             <span id="legend-llv20" class="text-green-400 font-bold">$--</span>
                         </div>
                         <div class="flex items-center justify-between px-1.5 border-r border-gray-800">
-                            <span class="text-rose-400">1H压:</span>
+                            <span class="text-rose-400">压力位:</span>
                             <span id="legend-res" class="text-rose-400 font-bold">$--</span>
                         </div>
                         <div class="flex items-center justify-between px-1.5 border-r border-gray-800">
-                            <span class="text-sky-400">1H撑:</span>
+                            <span class="text-sky-400">支撑位:</span>
                             <span id="legend-sup" class="text-sky-400 font-bold">$--</span>
                         </div>
                         <div class="flex items-center justify-between px-1.5">
@@ -197,10 +195,9 @@
                         </div>
                     </div>
 
-                    <!-- Lightweight Charts 山形图挂载容器 + 悬浮十字光标 HUD -->
+                    <!-- 图表挂载区 -->
                     <div id="lw-chart-wrapper" class="flex-1 w-full rounded-lg overflow-hidden border border-gray-800 bg-[#070a0f] relative min-h-[390px]">
-                        <!-- 左上角悬浮实时十字光标数据 HUD -->
-                        <div id="chart-hud" class="absolute top-2.5 left-3 z-20 pointer-events-none bg-[#0b1018]/85 backdrop-blur-sm border border-gray-800/80 rounded-lg px-3 py-1.5 text-[11px] font-mono flex flex-wrap items-center gap-3 text-gray-300 shadow-lg">
+                        <div id="chart-hud" class="absolute top-2.5 left-3 z-20 pointer-events-none bg-[#0b1018]/90 backdrop-blur-sm border border-gray-800/80 rounded-lg px-3 py-1.5 text-[11px] font-mono flex flex-wrap items-center gap-3 text-gray-300 shadow-lg">
                             <span id="hud-time" class="text-gray-400">移动光标查看明细</span>
                             <span id="hud-price" class="text-white font-bold"></span>
                             <span id="hud-hl" class="text-gray-400"></span>
@@ -210,8 +207,9 @@
 
                         <div id="lw-chart" class="w-full h-full"></div>
 
-                        <div id="chart-loading" class="absolute inset-0 z-30 bg-[#070a0f]/85 flex items-center justify-center text-xs text-emerald-400 font-mono hidden">
-                            ⚡ 正在同步山形图与 1 / 2 / 3 信号矩阵...
+                        <div id="chart-loading" class="absolute inset-0 z-30 bg-[#070a0f]/90 flex flex-col items-center justify-center gap-2 text-xs text-emerald-400 font-mono hidden">
+                            <span id="chart-loading-text">⚡ 正在从真实行情源拉取原始 K 线数据...</span>
+                            <button onclick="retryCurrentChart()" class="px-3 py-1 rounded bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 text-[11px] mt-1">立即切换备用节点重试</button>
                         </div>
                     </div>
                 </div>
@@ -244,7 +242,6 @@
 
     <!-- ==================== 4. 终端核心逻辑脚本 ==================== -->
     <script>
-        // -------------------- 4.1 密码校验逻辑 --------------------
         const ACCESS_PASSCODE = "Fioni2026@Quant";
 
         function verifyPassword() {
@@ -261,7 +258,6 @@
             document.getElementById('auth-overlay').classList.add('hidden');
         }
 
-        // -------------------- 4.2 六大梯队定义与双置顶栏配置 --------------------
         const _FACTOR_Y_REAL = atob("U1BMVg==");
 
         const PINNED_3X_SYMS = ['SOXL', 'SOXS', 'TQQQ', 'SQQQ'];
@@ -294,58 +290,18 @@
             "STX": "STX"
         };
 
-        const FALLBACK_QUOTES = {
-            "SOXL": { spot: 45.97, dense: 40.10, sup: 40.59, res: 68.55, tag: "🔥双周期见底", rsi: 31.3 },
-            "SOXS": { spot: 12.85, dense: 12.10, sup: 12.35, res: 13.45, tag: "📡4H阻力", rsi: 62.4 },
-            "TQQQ": { spot: 88.40, dense: 84.90, sup: 86.20, res: 91.50, tag: "安全持股", rsi: 48.2 },
-            "SQQQ": { spot: 17.65, dense: 16.90, sup: 17.15, res: 18.30, tag: "观望运行", rsi: 51.0 },
-            "SOXX": { spot: 476.50, dense: 468.00, sup: 471.20, res: 503.20, tag: "🔥双周期见底", rsi: 34.8 },
-            "QQQ":  { spot: 647.05, dense: 642.50, sup: 644.80, res: 676.30, tag: "💎日线底部", rsi: 36.5 },
-            "SPY":  { spot: 733.00, dense: 720.70, sup: 726.50, res: 738.80, tag: "安全持股", rsi: 46.2 },
-            "^GSPC": { spot: 7332.40, dense: 7210.00, sup: 7268.00, res: 7390.00, tag: "安全持股", rsi: 46.2 },
-            "VOO":  { spot: 672.80, dense: 661.50, sup: 666.80, res: 678.50, tag: "安全持股", rsi: 46.1 },
-            "NQZ26.CME": { spot: 26685.00, dense: 26420.00, sup: 26510.00, res: 27850.00, tag: "💎日线底部", rsi: 36.8 },
-            "MRVL": { spot: 86.20, dense: 82.50, sup: 83.80, res: 89.40, tag: "安全持股", rsi: 54.3 },
-            "LITE": { spot: 68.40, dense: 65.20, sup: 66.10, res: 71.00, tag: "💎日线底部", rsi: 39.8 },
-            "BE":   { spot: 23.10, dense: 21.80, sup: 22.20, res: 24.50, tag: "安全持股", rsi: 50.4 },
-            "MRNA": { spot: 51.80, dense: 49.50, sup: 50.20, res: 54.10, tag: "⚡4H超卖", rsi: 35.6 },
-            "PLTR": { spot: 48.90, dense: 46.10, sup: 47.00, res: 51.20, tag: "⚠️日线超买", rsi: 66.8 },
-            "MSFT": { spot: 426.50, dense: 418.00, sup: 420.80, res: 433.00, tag: "安全持股", rsi: 49.5 },
-            "NOW":  { spot: 942.00, dense: 918.00, sup: 925.00, res: 960.00, tag: "安全持股", rsi: 55.0 },
-            "COHR": { spot: 95.80, dense: 91.90, sup: 93.10, res: 99.20, tag: "🔥双周期见底", rsi: 34.2 },
-            "AXTI": { spot: 4.72,  dense: 4.45,  sup: 4.55,  res: 5.05,  tag: "⚡4H超卖", rsi: 36.9 },
-            "CRCL": { spot: 81.74, dense: 77.93, sup: 78.60, res: 84.20, tag: "安全持股", rsi: 51.2 },
-            "SPCX": { spot: 26.40, dense: 25.80, sup: 25.95, res: 27.10, tag: "观望运行", rsi: 47.0 },
-            "NBIS": { spot: 31.80, dense: 29.90, sup: 30.40, res: 33.60, tag: "💎日线底部", rsi: 38.4 },
-            "NVDA": { spot: 198.60, dense: 191.50, sup: 194.00, res: 205.50, tag: "安全持股", rsi: 46.5 },
-            "AVGO": { spot: 174.20, dense: 168.50, sup: 170.20, res: 179.80, tag: "安全持股", rsi: 48.0 },
-            "TSM":  { spot: 192.40, dense: 185.80, sup: 188.00, res: 198.50, tag: "安全持股", rsi: 50.1 },
-            "ASML": { spot: 712.00, dense: 692.00, sup: 698.00, res: 730.00, tag: "💎日线底部", rsi: 37.2 },
-            "AMD":  { spot: 148.50, dense: 142.80, sup: 144.50, res: 154.00, tag: "⚡4H超卖", rsi: 39.5 },
-            "ARM":  { spot: 142.00, dense: 136.00, sup: 138.20, res: 148.50, tag: "安全持股", rsi: 47.8 },
-            "INTC": { spot: 22.80, dense: 21.60, sup: 22.00, res: 24.10, tag: "观望运行", rsi: 44.0 },
-            "MU":   { spot: 104.50, dense: 99.80, sup: 101.20, res: 108.90, tag: "安全持股", rsi: 46.2 },
-            "STX":  { spot: 101.80, dense: 97.90, sup: 99.10, res: 105.50, tag: "💎日线底部", rsi: 40.5 },
-            "WDC":  { spot: 67.40, dense: 64.50, sup: 65.40, res: 70.20, tag: "安全持股", rsi: 45.8 },
-            "SNDK": { spot: 54.20, dense: 51.60, sup: 52.40, res: 56.80, tag: "安全持股", rsi: 47.1 },
-            "BTC-USD": { spot: 79835, dense: 77800, sup: 78500, res: 81600, tag: "安全持股", rsi: 53.5 },
-            "MSTR": { spot: 248.00, dense: 235.00, sup: 239.50, res: 262.00, tag: "安全持股", rsi: 54.0 },
-            "AAPL": { spot: 228.40, dense: 223.00, sup: 224.80, res: 233.50, tag: "安全持股", rsi: 48.5 },
-            "GOOG": { spot: 290.50, dense: 285.80, sup: 287.20, res: 298.00, tag: "🔥双周期见底", rsi: 33.4 },
-            "AMZN": { spot: 204.20, dense: 198.50, sup: 200.10, res: 209.50, tag: "安全持股", rsi: 52.8 },
-            "META": { spot: 584.00, dense: 571.00, sup: 575.00, res: 596.00, tag: "💎日线底部", rsi: 41.2 },
-            "TSLA": { spot: 254.80, dense: 245.50, sup: 248.20, res: 264.00, tag: "安全持股", rsi: 49.6 },
-            "ORCL": { spot: 172.50, dense: 166.80, sup: 168.50, res: 178.00, tag: "安全持股", rsi: 51.0 },
-            "DELL": { spot: 124.60, dense: 119.20, sup: 121.00, res: 129.80, tag: "安全持股", rsi: 46.9 },
-            "CRWV": { spot: 46.20, dense: 43.80, sup: 44.50, res: 48.90, tag: "观望运行", rsi: 45.0 },
-            "ALAB": { spot: 88.50, dense: 83.20, sup: 84.90, res: 93.40, tag: "安全持股", rsi: 52.3 },
-            [_FACTOR_Y_REAL]: { spot: 72.45, dense: 71.80, sup: 71.95, res: 72.90, tag: "⚠️日线超买", rsi: 59.4 },
-            "KO":   { spot: 91.86, dense: 90.50, sup: 91.10, res: 92.40, tag: "安全持股", rsi: 51.5 },
-            "SCHD": { spot: 28.90, dense: 28.45, sup: 28.60, res: 29.25, tag: "🚨双周期触顶", rsi: 66.2 },
-            "GLD":  { spot: 254.20, dense: 250.10, sup: 251.40, res: 257.80, tag: "💎日线底部", rsi: 40.8 },
-            "GDX":  { spot: 39.80, dense: 38.40, sup: 38.90, res: 41.20, tag: "💎日线底部", rsi: 39.5 },
-            "VST":  { spot: 128.40, dense: 122.50, sup: 124.20, res: 133.80, tag: "安全持股", rsi: 53.0 },
-            "NLR":  { spot: 86.20, dense: 83.40, sup: 84.20, res: 88.90, tag: "安全持股", rsi: 50.8 }
+        // 仅作为尚未排到后台队列前的卡片占位文字，绝不用于生成假 K 线
+        const INITIAL_PLACEHOLDERS = {
+            "SOXL": { spot: 45.94, dense: 40.10, sup: 40.59, res: 70.10, tag: "同步中...", rsi: 31.3 },
+            "SOXS": { spot: 12.85, dense: 12.10, sup: 12.35, res: 13.45, tag: "同步中...", rsi: 62.4 },
+            "TQQQ": { spot: 88.40, dense: 84.90, sup: 86.20, res: 91.50, tag: "同步中...", rsi: 48.2 },
+            "SQQQ": { spot: 17.65, dense: 16.90, sup: 17.15, res: 18.30, tag: "同步中...", rsi: 51.0 },
+            "SOXX": { spot: 136.53, dense: 132.46, sup: 134.07, res: 184.29, tag: "同步中...", rsi: 34.8 },
+            "QQQ":  { spot: 647.05, dense: 642.50, sup: 644.80, res: 676.30, tag: "同步中...", rsi: 36.5 },
+            "SPY":  { spot: 733.00, dense: 720.70, sup: 726.50, res: 738.80, tag: "同步中...", rsi: 46.2 },
+            "^GSPC": { spot: 7332.40, dense: 7210.00, sup: 7268.00, res: 7390.00, tag: "同步中...", rsi: 46.2 },
+            "VOO":  { spot: 672.80, dense: 661.50, sup: 666.80, res: 678.50, tag: "同步中...", rsi: 46.1 },
+            "NQZ26.CME": { spot: 26685.00, dense: 26420.00, sup: 26510.00, res: 27850.00, tag: "同步中...", rsi: 36.8 }
         };
 
         const quotesMap = {};
@@ -354,11 +310,10 @@
 
         let currentSector = "🌐 置顶大盘与期货";
         let currentRawSym = "SOXL";
-        let currentTimeframe = "4h";
+        let currentTimeframe = "1d"; // 默认使用日K方便直接对比 SOXL 与 SOXX
         let currentBars = [];
-        let isMountainMode = true; // 默认使用专业山形图 (AreaSeries)
+        let isMountainMode = true;
 
-        // -------------------- 4.3 格式化与 Fioni 空间矩阵解算函数 --------------------
         function fmtPrice(val, sym) {
             if (val === undefined || val === null || isNaN(val)) return "$--";
             if (sym && (sym.includes("BTC") || sym.includes("NQ") || sym === "^GSPC")) {
@@ -421,7 +376,7 @@
             sub.forEach(b => {
                 const typ = (b.high + b.low + b.close) / 3.0;
                 const idx = Math.min(bins - 1, Math.max(0, Math.floor((typ - lowMin) / step)));
-                bucketVols[idx] += (b.volume || 1);
+                bucketVols[idx] += (b.volume > 0 ? b.volume : 1);
             });
 
             let pocIdx = 0;
@@ -460,25 +415,27 @@
                 sup: Number(sup.toFixed(2)),
                 res: Number(res.toFixed(2)),
                 rsi: Number(rsi.toFixed(1)),
-                tag
+                tag,
+                isReal: true
             };
         }
 
-        function initBaselineQuotes() {
-            Object.keys(FALLBACK_QUOTES).forEach(sym => {
-                quotesMap[sym] = { ...FALLBACK_QUOTES[sym] };
+        function initPlaceholders() {
+            const allSyms = Array.from(new Set(Object.values(SECTOR_CONFIG).flat()));
+            allSyms.forEach(sym => {
+                quotesMap[sym] = INITIAL_PLACEHOLDERS[sym]
+                    ? { ...INITIAL_PLACEHOLDERS[sym] }
+                    : { spot: null, dense: null, sup: null, res: null, rsi: 50, tag: "待同步", isReal: false };
             });
         }
 
-        // -------------------- 4.4 专业山形图 (AreaSeries) + 1号强支撑/强压力实线轨 + 底部量能柱 --------------------
+        // ==================== 4.4 宽屏专业山形图 (彻底隐藏 Volume 右轴数值标签) ====================
         let lwChart = null;
         let mountainSeries = null;
         let candleSeries = null;
         let volumeSeries = null;
-        // 仅保留 1 号指标的 20 周期强阻力线(红实线) 与 强支撑线(绿实线)
         let ind1ResSeries = null;
         let ind1SupSeries = null;
-
         let activePriceLines = [];
 
         function initLightweightChart() {
@@ -501,18 +458,19 @@
                 },
                 rightPriceScale: {
                     borderColor: '#1e2638',
-                    scaleMargins: { top: 0.12, bottom: 0.18 }
+                    scaleMargins: { top: 0.12, bottom: 0.16 }
                 },
                 timeScale: {
                     borderColor: '#1e2638',
                     timeVisible: true,
                     secondsVisible: false,
-                    rightOffset: 6,
-                    barSpacing: 9
+                    fixLeftEdge: true,
+                    rightOffset: 8,
+                    barSpacing: 12,
+                    minBarSpacing: 4
                 }
             });
 
-            // 1. 主图山形图 (AreaSeries) - 机构级翠绿渐变山形流线
             mountainSeries = lwChart.addAreaSeries({
                 lineColor: '#10b981',
                 topColor: 'rgba(16, 185, 129, 0.32)',
@@ -524,7 +482,6 @@
                 priceLineColor: '#10b981'
             });
 
-            // 2. 备用蜡烛图图层 (可一键切换)
             candleSeries = lwChart.addCandlestickSeries({
                 upColor: '#10b981',
                 downColor: '#ef4444',
@@ -535,16 +492,17 @@
                 visible: false
             });
 
-            // 3. 底部副图成交量柱状图 (占底部 15% 高度，不遮挡主图山形线)
+            // 关键修复：lastValueVisible: false 彻底消除右轴底部的 900K / 59.14M 标签！
             volumeSeries = lwChart.addHistogramSeries({
                 priceFormat: { type: 'volume' },
-                priceScaleId: ''
+                priceScaleId: 'volume_sub_scale',
+                lastValueVisible: false,
+                priceLineVisible: false
             });
-            volumeSeries.priceScale().applyOptions({
+            lwChart.priceScale('volume_sub_scale').applyOptions({
                 scaleMargins: { top: 0.84, bottom: 0.0 }
             });
 
-            // 4. 仅保留 1 号指标的 20 周期强阻力线 (HHV20 红粗实线) 与 强支撑线 (LLV20 绿粗实线)
             ind1ResSeries = lwChart.addLineSeries({
                 color: '#ef4444',
                 lineWidth: 2,
@@ -562,14 +520,11 @@
                 title: '强撑'
             });
 
-            // 5. 十字光标移动实时 HUD 详情联动
             lwChart.subscribeCrosshairMove(param => {
-                if (!param || !param.time || !barLookupByTime[param.time]) {
-                    return;
-                }
+                if (!param || !param.time || !barLookupByTime[param.time]) return;
                 const info = barLookupByTime[param.time];
                 const dt = new Date(param.time * 1000);
-                const timeStr = `${dt.getMonth()+1}/${dt.getDate()} ${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}`;
+                const timeStr = `${dt.getFullYear()}/${dt.getMonth()+1}/${dt.getDate()} ${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}`;
                 document.getElementById('hud-time').innerText = timeStr;
                 document.getElementById('hud-price').innerText = `收: ${fmtPrice(info.close, currentRawSym)}`;
                 document.getElementById('hud-hl').innerText = `高:${fmtPrice(info.high, currentRawSym)} 低:${fmtPrice(info.low, currentRawSym)}`;
@@ -580,6 +535,7 @@
             window.addEventListener('resize', () => {
                 if (lwChart && container) {
                     lwChart.applyOptions({ width: container.clientWidth, height: container.clientHeight });
+                    lwChart.timeScale().fitContent();
                 }
             });
         }
@@ -599,15 +555,15 @@
                 candleSeries.applyOptions({ visible: true });
             }
             refreshIndicatorsOnly();
-            const q = quotesMap[currentRawSym] || FALLBACK_QUOTES[currentRawSym];
-            drawKeyLevelsOnChart(q, currentRawSym);
+            const q = quotesMap[currentRawSym];
+            if (q && q.spot) drawKeyLevelsOnChart(q, currentRawSym);
         }
 
         function resetChartZoom() {
             if (lwChart) lwChart.timeScale().fitContent();
         }
 
-        // ==================== 核心解算：匿名化 1 / 2 / 3 指标算法 (仅保留 1 号强支撑/强压力辅助线) ====================
+        // ==================== 4.5 信号 1 / 2 / 3 解算 (仅保留 1 号强压强撑实线) ====================
         function evaluateAndRenderThreeIndicators(bars) {
             if (!mountainSeries || !bars || bars.length < 5) return;
 
@@ -660,9 +616,8 @@
             const markers = [];
             let trigCount = { c1: 0, c2: 0, c3: 0 };
 
-            // 智能防刷屏冷却锁：避免相邻 K 线重复堆叠同一方向文字
-            let lastBearPinIdx = -10;
-            let lastBullPinIdx = -10;
+            let lastAboveIdx = -10;
+            let lastBelowIdx = -10;
 
             for (let i = 0; i < n; i++) {
                 const b = bars[i];
@@ -672,7 +627,6 @@
                 const upShad = b.high - Math.max(b.close, b.open);
                 const dnShad = Math.min(b.close, b.open) - b.low;
 
-                // 仅绘制 1 号指标的 20 周期强阻力线 & 强支撑线
                 if (show1) {
                     ind1ResData.push({ time: t, value: hhv20[i] });
                     ind1SupData.push({ time: t, value: llv20[i] });
@@ -683,7 +637,6 @@
                 let aboveColor = '#22c55e';
                 let belowColor = '#ef4444';
 
-                // ---------------- 信号 1 ----------------
                 if (i >= 1 && show1) {
                     const refRes = hhv20[i - 1];
                     const refSup = llv20[i - 1];
@@ -693,34 +646,16 @@
 
                     const trueBullBreak = (b.close > refRes) && (prevClose <= refRes) && isBigVol && (b.close > b.open);
                     const trueBearBreak = (b.close < refSup) && (prevClose >= refSup) && isBigVol && (b.close < b.open);
-
                     const falseBull1 = (b.high > refRes) && (b.close < refRes) && (upShad >= 0.3 * (rangeK + 0.0001));
                     const falseBull2 = (b.close > refRes) && (prevClose <= refRes) && isLowVol;
                     const falseBear1 = (b.low < refSup) && (b.close > refSup) && (dnShad >= 0.3 * (rangeK + 0.0001));
 
-                    if (trueBullBreak) {
-                        belowTags.push('▲');
-                        belowColor = '#ef4444';
-                        trigCount.c1++;
-                    }
-                    if (trueBearBreak) {
-                        aboveTags.push('▼');
-                        aboveColor = '#22c55e';
-                        trigCount.c1++;
-                    }
-                    if (falseBull1 || falseBull2) {
-                        aboveTags.push('假');
-                        aboveColor = '#22c55e';
-                        trigCount.c1++;
-                    }
-                    if (falseBear1) {
-                        belowTags.push('假');
-                        belowColor = '#ef4444';
-                        trigCount.c1++;
-                    }
+                    if (trueBullBreak) { belowTags.push('▲'); belowColor = '#ef4444'; trigCount.c1++; }
+                    if (trueBearBreak) { aboveTags.push('▼'); aboveColor = '#22c55e'; trigCount.c1++; }
+                    if (falseBull1 || falseBull2) { aboveTags.push('假'); aboveColor = '#22c55e'; trigCount.c1++; }
+                    if (falseBear1) { belowTags.push('假'); belowColor = '#ef4444'; trigCount.c1++; }
                 }
 
-                // ---------------- 信号 2 (已彻底祛除辅助线，仅保留形态信号) ----------------
                 if (show2) {
                     const atrFilter = rangeK > 0.6 * rangeMa10[i];
                     const volFilter = (b.volume || 1) >= 1.2 * volMa20[i];
@@ -730,38 +665,18 @@
                     const rawBearPin = isHighZone && (rangeK > 0) && ((upShad / rangeK) > 0.50) && ((body / rangeK) < 0.35) && atrFilter;
                     const rawBullPin = isLowZone  && (rangeK > 0) && ((dnShad / rangeK) > 0.50) && ((body / rangeK) < 0.35) && atrFilter;
 
-                    if (rawBearPin && (i - lastBearPinIdx >= 3 || volFilter)) {
-                        aboveTags.push('尖');
-                        aboveColor = volFilter ? '#22c55e' : '#e2e8f0';
-                        lastBearPinIdx = i;
-                        trigCount.c2++;
-                    }
-                    if (rawBullPin && (i - lastBullPinIdx >= 3 || volFilter)) {
-                        belowTags.push('脚');
-                        belowColor = volFilter ? '#ef4444' : '#e2e8f0';
-                        lastBullPinIdx = i;
-                        trigCount.c2++;
-                    }
+                    if (rawBearPin) { aboveTags.push('尖'); aboveColor = volFilter ? '#22c55e' : '#e2e8f0'; trigCount.c2++; }
+                    if (rawBullPin) { belowTags.push('脚'); belowColor = volFilter ? '#ef4444' : '#e2e8f0'; trigCount.c2++; }
                 }
 
-                // ---------------- 信号 3 (已彻底祛除辅助线，仅保留清扫信号) ----------------
                 if (i >= 1 && show3) {
                     const prevSwingHigh = hhv15[i - 1];
                     const prevSwingLow  = llv15[i - 1];
-
                     const bslSweep = (b.high > prevSwingHigh) && (b.close < prevSwingHigh) && (upShad > 0.3 * rangeK);
                     const sslSweep = (b.low < prevSwingLow)   && (b.close > prevSwingLow)  && (dnShad > 0.3 * rangeK);
 
-                    if (bslSweep) {
-                        aboveTags.push('呼');
-                        aboveColor = '#22c55e';
-                        trigCount.c3++;
-                    }
-                    if (sslSweep) {
-                        belowTags.push('吸');
-                        belowColor = '#ef4444';
-                        trigCount.c3++;
-                    }
+                    if (bslSweep) { aboveTags.push('呼'); aboveColor = '#22c55e'; trigCount.c3++; }
+                    if (sslSweep) { belowTags.push('吸'); belowColor = '#ef4444'; trigCount.c3++; }
                 }
 
                 const combinedSig = [...aboveTags, ...belowTags].join('·');
@@ -772,7 +687,7 @@
                     sigText: combinedSig
                 };
 
-                if (aboveTags.length > 0) {
+                if (aboveTags.length > 0 && (i - lastAboveIdx >= 2)) {
                     markers.push({
                         time: t,
                         position: 'aboveBar',
@@ -780,8 +695,9 @@
                         shape: 'arrowDown',
                         text: Array.from(new Set(aboveTags)).join('·')
                     });
+                    lastAboveIdx = i;
                 }
-                if (belowTags.length > 0) {
+                if (belowTags.length > 0 && (i - lastBelowIdx >= 2)) {
                     markers.push({
                         time: t,
                         position: 'belowBar',
@@ -789,20 +705,18 @@
                         shape: 'arrowUp',
                         text: Array.from(new Set(belowTags)).join('·')
                     });
+                    lastBelowIdx = i;
                 }
             }
 
-            // 更新 1 号指标的强阻力线与强支撑线
             ind1ResSeries.setData(show1 ? ind1ResData : []);
             ind1SupSeries.setData(show1 ? ind1SupData : []);
 
-            // 更新图例中的最新 20 周期强压/强撑数值
             if (n > 0) {
                 document.getElementById('legend-hhv20').innerText = fmtPrice(hhv20[n - 1], currentRawSym);
                 document.getElementById('legend-llv20').innerText = fmtPrice(llv20[n - 1], currentRawSym);
             }
 
-            // 将信号标记挂载到当前激活的主图层（山形图或蜡烛图）
             if (isMountainMode) {
                 mountainSeries.setMarkers(markers);
                 candleSeries.setMarkers([]);
@@ -813,7 +727,7 @@
 
             const sumEl = document.getElementById('ind-active-summary');
             if (sumEl) {
-                sumEl.innerText = `信号统计: 1(${trigCount.c1}) | 2(${trigCount.c2}) | 3(${trigCount.c3})`;
+                sumEl.innerText = `信号: 1(${trigCount.c1}) | 2(${trigCount.c2}) | 3(${trigCount.c3})`;
             }
         }
 
@@ -825,12 +739,14 @@
 
         function drawKeyLevelsOnChart(q, rawSym) {
             const targetSeries = isMountainMode ? mountainSeries : candleSeries;
-            if (!targetSeries || !q) return;
+            if (!targetSeries || !q || !q.spot) return;
 
             activePriceLines.forEach(item => {
                 try { item.series.removePriceLine(item.line); } catch (e) {}
             });
             activePriceLines = [];
+
+            const tfLabel = currentTimeframe.toUpperCase();
 
             const resLine = targetSeries.createPriceLine({
                 price: q.res,
@@ -838,7 +754,7 @@
                 lineWidth: 1,
                 lineStyle: LightweightCharts.LineStyle.Dashed,
                 axisLabelVisible: true,
-                title: `1H压 ${fmtPrice(q.res, rawSym)}`
+                title: `${tfLabel}压 ${fmtPrice(q.res, rawSym)}`
             });
 
             const supLine = targetSeries.createPriceLine({
@@ -847,7 +763,7 @@
                 lineWidth: 1,
                 lineStyle: LightweightCharts.LineStyle.Dashed,
                 axisLabelVisible: true,
-                title: `1H撑 ${fmtPrice(q.sup, rawSym)}`
+                title: `${tfLabel}撑 ${fmtPrice(q.sup, rawSym)}`
             });
 
             const denseLine = targetSeries.createPriceLine({
@@ -873,124 +789,102 @@
             document.getElementById('chart-sig-badge').innerText = q.tag;
         }
 
-        // 修复版自然流体离线波形生成器（彻底消除梳子状伪影，贴合真实波段结构）
-        function generateRealisticKlines(q, tf) {
-            const count = 96;
-            const nowSec = Math.floor(Date.now() / 1000);
-            const stepSec = tf === '15m' ? 900 : (tf === '1h' ? 3600 : (tf === '4h' ? 14400 : 86400));
-            const bars = [];
+        // ==================== 4.6 核心修复：彻底废除假正弦波函数，采用 5 通道破缓存真实 K 线引擎 ====================
+        function parseYahooChartJson(data, tf) {
+            const res = data?.chart?.result?.[0];
+            if (!res || !res.timestamp || !res.indicators?.quote?.[0]) return null;
 
-            const span = Math.max(q.spot * 0.06, (q.res - q.dense) * 0.85);
-            const mid = (q.sup + q.res) * 0.5;
-            const closes = new Array(count).fill(0);
+            const ts = res.timestamp;
+            const q = res.indicators.quote[0];
+            const seenTimes = new Set();
+            let bars = [];
 
-            // 使用多频正弦波 + 确定性哈希噪声合成自然的金融趋势波段，终点严格锚定 q.spot
-            let rawArr = [];
-            let acc = 0;
-            const symSeed = (q.spot * 13.37) + (q.dense * 7.1);
-            for (let i = 0; i < count; i++) {
-                const wave1 = Math.sin((i / count) * Math.PI * 2.5 + symSeed) * (span * 0.28);
-                const wave2 = Math.cos((i / count) * Math.PI * 5.5 + symSeed * 1.7) * (span * 0.12);
-                const noise = (Math.sin(i * 12.9898 + symSeed) * 43758.5453 % 1) * (span * 0.06);
-                acc = acc * 0.85 + noise;
-                rawArr.push(mid + wave1 + wave2 + acc);
+            for (let i = 0; i < ts.length; i++) {
+                const t = ts[i];
+                if (seenTimes.has(t)) continue;
+                const o = q.open?.[i];
+                const h = q.high?.[i];
+                const l = q.low?.[i];
+                const c = q.close?.[i];
+                if (o != null && h != null && l != null && c != null && !isNaN(c) && c > 0) {
+                    seenTimes.add(t);
+                    bars.push({
+                        time: t,
+                        open: Number(o.toFixed(2)),
+                        high: Number(h.toFixed(2)),
+                        low: Number(l.toFixed(2)),
+                        close: Number(c.toFixed(2)),
+                        volume: q.volume?.[i] || 0
+                    });
+                }
             }
 
-            // 将最后一根平滑过渡锚定到真实 q.spot
-            const endDiff = q.spot - rawArr[count - 1];
-            for (let i = 0; i < count; i++) {
-                const weight = Math.pow(i / (count - 1), 1.6);
-                closes[i] = Math.max(q.dense * 0.92, rawArr[i] + endDiff * weight);
+            bars.sort((a, b) => a.time - b.time);
+
+            if (tf === '4h' && bars.length >= 8) {
+                const agg = [];
+                for (let i = 0; i < bars.length; i += 4) {
+                    const slice = bars.slice(i, i + 4);
+                    agg.push({
+                        time: slice[0].time,
+                        open: slice[0].open,
+                        high: Math.max(...slice.map(s => s.high)),
+                        low: Math.min(...slice.map(s => s.low)),
+                        close: slice[slice.length - 1].close,
+                        volume: slice.reduce((a, b) => a + b.volume, 0)
+                    });
+                }
+                bars = agg;
             }
-            closes[count - 1] = q.spot;
 
-            for (let i = 0; i < count; i++) {
-                const close = Number(closes[i].toFixed(2));
-                const open = Number((i === 0 ? close * 0.996 : closes[i - 1]).toFixed(2));
-                const body = Math.abs(close - open);
-                const baseWick = Math.max(q.spot * 0.003, body * 0.55);
-
-                // 仅在波段极值点自然产生上下影线
-                const isLocalHigh = i > 2 && i < count - 2 && close > closes[i-1] && close > closes[i+1];
-                const isLocalLow  = i > 2 && i < count - 2 && close < closes[i-1] && close < closes[i+1];
-
-                const upWick = isLocalHigh ? baseWick * 2.3 : baseWick * 0.6;
-                const dnWick = isLocalLow  ? baseWick * 2.3 : baseWick * 0.6;
-
-                const high = Number((Math.max(open, close) + upWick).toFixed(2));
-                const low  = Number((Math.min(open, close) - dnWick).toFixed(2));
-                const volMult = (isLocalHigh || isLocalLow) ? 1.65 : (0.75 + (i % 5) * 0.12);
-
-                bars.push({
-                    time: nowSec - (count - 1 - i) * stepSec,
-                    open,
-                    high,
-                    low,
-                    close,
-                    volume: Math.round(1200000 * volMult)
-                });
-            }
-            return bars;
+            return bars.length >= 10 ? bars : null;
         }
 
-        async function fetchRealYahooKlines(rawSym, tf = '4h') {
+        async function fetchRealYahooKlines(rawSym, tf = '1d') {
+            // 1. 优先检查云端预生成的 fioni_data.json 中是否已内嵌该标的真实 K 线
+            if (window.cloudEmbeddedKlines && window.cloudEmbeddedKlines[`${rawSym}_${tf}`]) {
+                return window.cloudEmbeddedKlines[`${rawSym}_${tf}`];
+            }
+
             const yfInterval = tf === '4h' ? '1h' : tf;
-            const yfRange = tf === '15m' ? '5d' : (tf === '1d' ? '6mo' : '1mo');
-            const candidateSyms = rawSym === 'NQZ26.CME' ? ['NQZ26.CME', 'NQ=F'] : [rawSym];
+            const yfRange = tf === '15m' ? '5d' : (tf === '1d' ? '6mo' : (tf === '4h' ? '3mo' : '1mo'));
+            const candidateSyms = rawSym === 'NQZ26.CME' ? ['NQ=F', 'NQZ26.CME'] : [rawSym];
+            // 分钟级时间戳破除公共代理 CDN 幽灵缓存！
+            const cacheBuster = Math.floor(Date.now() / 60000);
 
             for (const querySym of candidateSyms) {
-                const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(querySym)}?interval=${yfInterval}&range=${yfRange}`;
-                const proxies = [
-                    `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`,
-                    `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`,
-                    `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetUrl)}`
+                const yUrl1 = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(querySym)}?interval=${yfInterval}&range=${yfRange}&includePrePost=false&_t=${cacheBuster}`;
+                const yUrl2 = `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(querySym)}?interval=${yfInterval}&range=${yfRange}&includePrePost=false&_t=${cacheBuster}`;
+
+                // 5 大高可用独立代理通道（含 AllOrigins disableCache 官方破缓存接口）
+                const channels = [
+                    { url: `https://api.allorigins.win/get?url=${encodeURIComponent(yUrl1)}&disableCache=true`, wrapped: true },
+                    { url: `https://corsproxy.io/?${encodeURIComponent(yUrl2)}`, wrapped: false },
+                    { url: `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(yUrl1)}`, wrapped: false },
+                    { url: `https://api.allorigins.win/raw?url=${encodeURIComponent(yUrl2)}`, wrapped: false },
+                    { url: `https://thingproxy.freeboard.io/fetch/${yUrl1}`, wrapped: false }
                 ];
 
-                for (const proxyUrl of proxies) {
+                for (const ch of channels) {
                     try {
                         const controller = new AbortController();
-                        const timer = setTimeout(() => controller.abort(), 4500);
-                        const resp = await fetch(proxyUrl, { signal: controller.signal });
+                        const timer = setTimeout(() => controller.abort(), 5500);
+                        const resp = await fetch(ch.url, { signal: controller.signal, cache: 'no-store' });
                         clearTimeout(timer);
                         if (!resp.ok) continue;
-                        const data = await resp.json();
-                        const res = data?.chart?.result?.[0];
-                        if (!res || !res.timestamp) continue;
 
-                        const ts = res.timestamp;
-                        const q = res.indicators.quote[0];
-                        let bars = [];
-                        for (let i = 0; i < ts.length; i++) {
-                            if (q.open[i] != null && q.close[i] != null && q.high[i] != null && q.low[i] != null) {
-                                bars.push({
-                                    time: ts[i],
-                                    open: Number(q.open[i].toFixed(2)),
-                                    high: Number(q.high[i].toFixed(2)),
-                                    low: Number(q.low[i].toFixed(2)),
-                                    close: Number(q.close[i].toFixed(2)),
-                                    volume: q.volume[i] || 0
-                                });
-                            }
+                        let jsonPayload = await resp.json();
+                        if (ch.wrapped && jsonPayload && jsonPayload.contents) {
+                            jsonPayload = JSON.parse(jsonPayload.contents);
                         }
 
-                        if (tf === '4h' && bars.length >= 8) {
-                            const agg = [];
-                            for (let i = 0; i < bars.length; i += 4) {
-                                const slice = bars.slice(i, i + 4);
-                                agg.push({
-                                    time: slice[0].time,
-                                    open: slice[0].open,
-                                    high: Math.max(...slice.map(s => s.high)),
-                                    low: Math.min(...slice.map(s => s.low)),
-                                    close: slice[slice.length - 1].close,
-                                    volume: slice.reduce((a, b) => a + b.volume, 0)
-                                });
-                            }
-                            bars = agg;
+                        const bars = parseYahooChartJson(jsonPayload, tf);
+                        if (bars && bars.length >= 10) {
+                            return bars;
                         }
-
-                        if (bars.length > 15) return bars;
-                    } catch (err) {}
+                    } catch (err) {
+                        // 自动切换下一节点
+                    }
                 }
             }
             return null;
@@ -1003,7 +897,6 @@
             const dispName = getDisplayName(rawSym);
             const titleLabel = dispName === 'Y' ? '因子Y (已保密脱敏)' : dispName;
             document.getElementById('chart-title').innerText = `⛰️ ${titleLabel} 量化山形图终端 (${tf.toUpperCase()})`;
-            document.getElementById('chart-loading').classList.remove('hidden');
 
             document.querySelectorAll('.tf-btn').forEach(btn => {
                 btn.className = "tf-btn px-2 py-1 rounded bg-gray-800 hover:bg-gray-700 text-gray-300";
@@ -1015,58 +908,64 @@
             let bars = klineCache[cacheKey];
 
             if (!bars) {
+                document.getElementById('chart-loading').classList.remove('hidden');
+                document.getElementById('chart-loading-text').innerText = `⚡ 正在拉取 ${titleLabel} (${tf.toUpperCase()}) 真实原始 K 线数据...`;
                 bars = await fetchRealYahooKlines(rawSym, tf);
-                if (bars && bars.length > 15) {
+                if (bars && bars.length >= 10) {
                     klineCache[cacheKey] = bars;
-                    const liveCalc = calculateFioniLevels(bars, rawSym);
-                    quotesMap[rawSym] = liveCalc;
-                    const nowStr = new Date().toLocaleTimeString('zh-CN', { hour12: false });
-                    document.getElementById('sync-status').innerText = `🟢 实时行情已同步 (${nowStr})`;
-                    document.getElementById('sync-status').className = "text-[11px] px-2.5 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 font-mono";
                 }
             }
 
-            const q = quotesMap[rawSym] || FALLBACK_QUOTES[rawSym] || FALLBACK_QUOTES["SOXL"];
-            if (!bars) {
-                bars = generateRealisticKlines(q, tf);
+            if (!bars || bars.length < 10) {
+                document.getElementById('chart-loading-text').innerText = `⚠️ ${titleLabel} 真实行情节点繁忙，请点击下方按钮重试`;
+                return;
             }
+
+            document.getElementById('chart-loading').classList.add('hidden');
+
+            // 使用真实 K 线实时解算当前周期的支撑、压力、技术性成交密集区与现价
+            const liveCalc = calculateFioniLevels(bars, rawSym);
+            quotesMap[rawSym] = liveCalc;
+
+            const nowStr = new Date().toLocaleTimeString('zh-CN', { hour12: false });
+            document.getElementById('sync-status').innerText = `🟢 真实K线已验证 (${nowStr})`;
+            document.getElementById('sync-status').className = "text-[11px] px-2.5 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 font-mono";
 
             currentBars = bars;
 
-            // 1. 灌入山形图数据 (time, value = close)
             const areaData = bars.map(b => ({ time: b.time, value: b.close }));
             mountainSeries.setData(areaData);
-
-            // 2. 灌入备用蜡烛图数据
             candleSeries.setData(bars);
 
-            // 3. 灌入底部成交量柱状图数据 (红绿随阴阳线变色)
             const volData = bars.map(b => ({
                 time: b.time,
                 value: b.volume || 0,
-                color: b.close >= b.open ? 'rgba(16, 185, 129, 0.25)' : 'rgba(239, 68, 68, 0.25)'
+                color: b.close >= b.open ? 'rgba(16, 185, 129, 0.28)' : 'rgba(239, 68, 68, 0.28)'
             }));
             volumeSeries.setData(volData);
 
-            // 4. 绘制 1H 支撑/压力/密集区水平线 + 解算 1/2/3 信号与强支撑强压力轨
-            drawKeyLevelsOnChart(q, rawSym);
+            drawKeyLevelsOnChart(liveCalc, rawSym);
             evaluateAndRenderThreeIndicators(bars);
             lwChart.timeScale().fitContent();
 
-            // 默认更新 HUD 为最后一根 K 线状态
             const lastBar = bars[bars.length - 1];
             if (lastBar && barLookupByTime[lastBar.time]) {
                 const info = barLookupByTime[lastBar.time];
-                document.getElementById('hud-time').innerText = "最新Bar";
+                const dt = new Date(lastBar.time * 1000);
+                document.getElementById('hud-time').innerText = `${dt.getFullYear()}/${dt.getMonth()+1}/${dt.getDate()}`;
                 document.getElementById('hud-price').innerText = `现价: ${fmtPrice(info.close, rawSym)}`;
                 document.getElementById('hud-hl').innerText = `高:${fmtPrice(info.high, rawSym)} 低:${fmtPrice(info.low, rawSym)}`;
                 document.getElementById('hud-bands').innerText = `强压:${fmtPrice(info.hhv20, rawSym)} 强撑:${fmtPrice(info.llv20, rawSym)}`;
                 document.getElementById('hud-sig').innerText = info.sigText ? `⚡[${info.sigText}]` : '';
             }
 
-            document.getElementById('chart-loading').classList.add('hidden');
             renderAllCards();
             updateDiscordPreview(rawSym);
+        }
+
+        function retryCurrentChart() {
+            delete klineCache[`${currentRawSym}_${currentTimeframe}`];
+            loadSymbolChartAndLevels(currentRawSym, currentTimeframe);
         }
 
         function changeTimeframe(tf) {
@@ -1079,48 +978,24 @@
 
         function updateDiscordPreview(rawSym) {
             const disp = getShortName(rawSym);
-            const q = quotesMap[rawSym] || FALLBACK_QUOTES[rawSym];
-            if (!q) return;
+            const q = quotesMap[rawSym];
+            if (!q || !q.spot) return;
             document.getElementById('selected-sym-label').innerText = "当前选中: " + getDisplayName(rawSym);
             const block = `${disp.padEnd(6, ' ')} 现:${fmtPrice(q.spot, rawSym)} [${q.tag}]\n技术性成交密集区: ${fmtPrice(q.dense, rawSym)}\n1H撑:${fmtPrice(q.sup, rawSym).padEnd(7, ' ')} | 1H压:${fmtPrice(q.res, rawSym)}`;
             document.getElementById('discord-preview').innerText = block;
         }
 
-        // -------------------- 4.5 渲染置顶一(3X)、置顶二(大盘指数与期货)、共振区与六大梯队 --------------------
         function renderAllCards() {
             const pGrid = document.getElementById('pinned-grid');
             pGrid.innerHTML = PINNED_3X_SYMS.map(sym => {
-                const q = quotesMap[sym] || FALLBACK_QUOTES[sym];
+                const q = quotesMap[sym] || {};
                 const isActive = currentRawSym === sym ? 'card-active' : '';
                 return `
                 <div onclick="selectTickerBySym('${sym}')"
                     class="bg-[#090d14] p-3 rounded-xl border border-gray-800 card-hover ${isActive} cursor-pointer transition flex flex-col justify-between">
                     <div class="flex justify-between items-center">
                         <span class="font-bold text-white text-sm">${sym}</span>
-                        <span class="text-[11px] px-1.5 py-0.5 rounded bg-gray-800 text-amber-300">${q.tag}</span>
-                    </div>
-                    <div class="my-1.5">
-                        <div class="text-base font-bold font-mono text-white">${fmtPrice(q.spot, sym)}</div>
-                        <div class="text-[11px] text-emerald-400 font-mono mt-0.5">密集区: ${fmtPrice(q.dense, sym)}</div>
-                    </div>
-                    <div class="text-[10px] text-gray-400 font-mono border-t border-gray-800/80 pt-1 flex justify-between">
-                        <span class="text-sky-400">1H撑:${fmtPrice(q.sup, sym)}</span>
-                        <span class="text-red-400">压:${fmtPrice(q.res, sym)}</span>
-                    </div>
-                </div>`;
-            }).join('');
-
-            const idxGrid = document.getElementById('index-pinned-grid');
-            idxGrid.innerHTML = PINNED_INDEX_SYMS.map(sym => {
-                const q = quotesMap[sym] || FALLBACK_QUOTES[sym];
-                const disp = getDisplayName(sym);
-                const isActive = currentRawSym === sym ? 'card-active' : '';
-                return `
-                <div onclick="selectTickerBySym('${sym}')"
-                    class="bg-[#090d14] p-3 rounded-xl border border-gray-800 card-hover ${isActive} cursor-pointer transition flex flex-col justify-between">
-                    <div class="flex justify-between items-center gap-1">
-                        <span class="font-bold text-sky-300 text-xs truncate">${disp}</span>
-                        <span class="text-[10px] px-1.5 py-0.5 rounded bg-gray-800 text-emerald-300 whitespace-nowrap">${q.tag}</span>
+                        <span class="text-[11px] px-1.5 py-0.5 rounded bg-gray-800 text-amber-300">${q.tag || '待同步'}</span>
                     </div>
                     <div class="my-1.5">
                         <div class="text-base font-bold font-mono text-white">${fmtPrice(q.spot, sym)}</div>
@@ -1133,22 +1008,45 @@
                 </div>`;
             }).join('');
 
-            const soxl = quotesMap['SOXL'];
-            const soxs = quotesMap['SOXS'];
-            const tqqq = quotesMap['TQQQ'];
-            const sqqq = quotesMap['SQQQ'];
-            const yAsset = quotesMap[_FACTOR_Y_REAL];
+            const idxGrid = document.getElementById('index-pinned-grid');
+            idxGrid.innerHTML = PINNED_INDEX_SYMS.map(sym => {
+                const q = quotesMap[sym] || {};
+                const disp = getDisplayName(sym);
+                const isActive = currentRawSym === sym ? 'card-active' : '';
+                return `
+                <div onclick="selectTickerBySym('${sym}')"
+                    class="bg-[#090d14] p-3 rounded-xl border border-gray-800 card-hover ${isActive} cursor-pointer transition flex flex-col justify-between">
+                    <div class="flex justify-between items-center gap-1">
+                        <span class="font-bold text-sky-300 text-xs truncate">${disp}</span>
+                        <span class="text-[10px] px-1.5 py-0.5 rounded bg-gray-800 text-emerald-300 whitespace-nowrap">${q.tag || '待同步'}</span>
+                    </div>
+                    <div class="my-1.5">
+                        <div class="text-base font-bold font-mono text-white">${fmtPrice(q.spot, sym)}</div>
+                        <div class="text-[11px] text-emerald-400 font-mono mt-0.5">密集区: ${fmtPrice(q.dense, sym)}</div>
+                    </div>
+                    <div class="text-[10px] text-gray-400 font-mono border-t border-gray-800/80 pt-1 flex justify-between">
+                        <span class="text-sky-400">撑:${fmtPrice(q.sup, sym)}</span>
+                        <span class="text-red-400">压:${fmtPrice(q.res, sym)}</span>
+                    </div>
+                </div>`;
+            }).join('');
+
+            const soxl = quotesMap['SOXL'] || {};
+            const soxs = quotesMap['SOXS'] || {};
+            const tqqq = quotesMap['TQQQ'] || {};
+            const sqqq = quotesMap['SQQQ'] || {};
+            const yAsset = quotesMap[_FACTOR_Y_REAL] || {};
 
             let macroStr = "⚖️ 【因子Y×芯片·攻防均衡】半导体与神秘因子Y运行于动态平衡带";
-            if (soxl.rsi <= 41 && yAsset.rsi >= 55) {
+            if ((soxl.rsi || 50) <= 41 && (yAsset.rsi || 50) >= 55) {
                 macroStr = "🟡 【因子Y×芯片·左侧背离】因子Y高位拥挤，芯片进入超卖密集区，留意高低切反抽！";
-            } else if (soxl.rsi >= 55 && soxl.rsi > yAsset.rsi) {
+            } else if ((soxl.rsi || 50) >= 55 && (soxl.rsi || 50) > (yAsset.rsi || 50)) {
                 macroStr = "🟢 【因子Y×芯片·右侧进攻】资金撤离防御因子Y，实质性涌入半导体板块！";
             }
 
             document.getElementById('resonance-box').innerHTML = `
                 <div class="p-2 rounded-lg bg-[#090d14] border border-gray-800 text-emerald-300 font-medium">
-                    ${macroStr} <span class="text-gray-400 font-mono ml-1">(芯片RSI:${soxl.rsi} vs 因子Y:${yAsset.rsi})</span>
+                    ${macroStr} <span class="text-gray-400 font-mono ml-1">(芯片RSI:${soxl.rsi || '--'} vs 因子Y:${yAsset.rsi || '--'})</span>
                 </div>
                 <div class="p-2 rounded-lg bg-[#090d14] border border-gray-800 text-gray-200 font-mono">
                     ⚔️ 【SOXL×SOXS 镜像】SOXL(现:${fmtPrice(soxl.spot,'SOXL')}|密集区:${fmtPrice(soxl.dense,'SOXL')}) vs SOXS(现:${fmtPrice(soxs.spot,'SOXS')}|密集区:${fmtPrice(soxs.dense,'SOXS')})
@@ -1184,7 +1082,7 @@
 
             const container = document.getElementById('sector-list');
             container.innerHTML = symList.map(rawSym => {
-                const q = quotesMap[rawSym] || FALLBACK_QUOTES[rawSym];
+                const q = quotesMap[rawSym] || {};
                 const disp = getDisplayName(rawSym);
                 const isActive = currentRawSym === rawSym ? 'card-active' : '';
                 return `
@@ -1193,43 +1091,76 @@
                     <div class="flex justify-between items-center text-xs">
                         <span class="font-bold text-white text-sm">${disp}</span>
                         <span class="font-mono text-white font-semibold">现: ${fmtPrice(q.spot, rawSym)}</span>
-                        <span class="px-2 py-0.5 rounded bg-gray-800/90 text-gray-200 text-[11px]">[${q.tag}]</span>
+                        <span class="px-2 py-0.5 rounded bg-gray-800/90 text-gray-200 text-[11px]">[${q.tag || '待同步'}]</span>
                     </div>
                     <div class="mt-1.5 flex justify-between items-center text-xs font-mono">
                         <span class="text-emerald-400 font-semibold">🎯 技术性成交密集区: ${fmtPrice(q.dense, rawSym)}</span>
-                        <span><span class="text-sky-400">1H撑:${fmtPrice(q.sup, rawSym)}</span> | <span class="text-red-400">压:${fmtPrice(q.res, rawSym)}</span></span>
+                        <span><span class="text-sky-400">撑:${fmtPrice(q.sup, rawSym)}</span> | <span class="text-red-400">压:${fmtPrice(q.res, rawSym)}</span></span>
                     </div>
                 </div>`;
             }).join('');
         }
 
-        // -------------------- 4.6 后台批量同步置顶核心与云端 JSON --------------------
-        async function refreshLiveAll() {
-            document.getElementById('sync-status').innerText = "🔄 正在拉取最新美股与期货盘面...";
-            delete klineCache[`${currentRawSym}_${currentTimeframe}`];
+        // ==================== 4.7 核心优化：防限流步进队列同步器 (解决并发被代理封禁导致数据失真) ====================
+        let isQueueRunning = false;
 
+        async function forceRefreshCurrentAndQueue() {
+            delete klineCache[`${currentRawSym}_${currentTimeframe}`];
+            await loadSymbolChartAndLevels(currentRawSym, currentTimeframe);
+            startBackgroundQueueSync();
+        }
+
+        async function startBackgroundQueueSync() {
+            if (isQueueRunning) return;
+            isQueueRunning = true;
+
+            // 1. 优先读取同目录下的 fioni_data.json（若 GitHub Actions 已生成，0.1秒全量同步所有股票与内嵌K线）
             try {
-                const resp = await fetch('./fioni_data.json?t=' + Date.now());
+                const resp = await fetch('./fioni_data.json?t=' + Date.now(), { cache: 'no-store' });
                 if (resp.ok) {
                     const cloud = await resp.json();
                     if (cloud && cloud.quotes) {
                         Object.assign(quotesMap, cloud.quotes);
-                        document.getElementById('sync-status').innerText = `🟢 云端同步: ${cloud.updated_at || '最新'}`;
-                        document.getElementById('sync-status').className = "text-[11px] px-2.5 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 font-mono";
+                        if (cloud.klines) {
+                            window.cloudEmbeddedKlines = cloud.klines;
+                            Object.assign(klineCache, cloud.klines);
+                        }
+                        renderAllCards();
+                        document.getElementById('sync-status').innerText = `🟢 云端全量同步 (${cloud.updated_at || '最新'})`;
                     }
                 }
             } catch (e) {}
 
-            const prioritySyms = Array.from(new Set([...PINNED_3X_SYMS, ...PINNED_INDEX_SYMS, currentRawSym]));
-            await Promise.all(prioritySyms.map(async (sym) => {
-                const bars = await fetchRealYahooKlines(sym, '1h');
-                if (bars && bars.length > 15) {
-                    klineCache[`${sym}_1h`] = bars;
-                    quotesMap[sym] = calculateFioniLevels(bars, sym);
-                }
-            }));
+            // 2. 步进式顺序队列（每次仅请求 2 支，间隔 350ms，100% 规避公共代理 HTTP 429 并发限流！）
+            const priorityList = Array.from(new Set([
+                ...PINNED_3X_SYMS,
+                ...PINNED_INDEX_SYMS,
+                ...SECTOR_CONFIG[currentSector]
+            ]));
 
-            await loadSymbolChartAndLevels(currentRawSym, currentTimeframe);
+            const progEl = document.getElementById('queue-progress');
+            let doneCount = 0;
+
+            for (let i = 0; i < priorityList.length; i += 2) {
+                const batch = priorityList.slice(i, i + 2);
+                await Promise.all(batch.map(async (sym) => {
+                    const cacheKey = `${sym}_${currentTimeframe}`;
+                    if (!klineCache[cacheKey]) {
+                        const bars = await fetchRealYahooKlines(sym, currentTimeframe);
+                        if (bars && bars.length >= 10) {
+                            klineCache[cacheKey] = bars;
+                            quotesMap[sym] = calculateFioniLevels(bars, sym);
+                        }
+                    }
+                    doneCount++;
+                }));
+                if (progEl) progEl.innerText = `已校准 ${doneCount}/${priorityList.length}`;
+                renderAllCards();
+                await new Promise(r => setTimeout(r, 350));
+            }
+
+            if (progEl) progEl.innerText = `全量真实校准完毕`;
+            isQueueRunning = false;
         }
 
         function copyDiscordBlock() {
@@ -1240,7 +1171,7 @@
 
         function copyAllPinned() {
             const lines = PINNED_3X_SYMS.map(sym => {
-                const q = quotesMap[sym];
+                const q = quotesMap[sym] || {};
                 return `${sym.padEnd(5, ' ')} 现:${fmtPrice(q.spot, sym)} [${q.tag}]\n技术性成交密集区: ${fmtPrice(q.dense, sym)}\n1H撑:${fmtPrice(q.sup, sym)} | 1H压:${fmtPrice(q.res, sym)}`;
             }).join("\n----------------------------\n");
             navigator.clipboard.writeText("👑 **【置顶一】3X多空杠杆决战台**\n```text\n" + lines + "\n```");
@@ -1249,7 +1180,7 @@
 
         function copyAllIndexes() {
             const lines = PINNED_INDEX_SYMS.map(sym => {
-                const q = quotesMap[sym];
+                const q = quotesMap[sym] || {};
                 const shortDisp = getShortName(sym);
                 return `${shortDisp.padEnd(6, ' ')} 现:${fmtPrice(q.spot, sym)} [${q.tag}]\n技术性成交密集区: ${fmtPrice(q.dense, sym)}\n1H撑:${fmtPrice(q.sup, sym)} | 1H压:${fmtPrice(q.res, sym)}`;
             }).join("\n----------------------------\n");
@@ -1257,7 +1188,6 @@
             alert("✅ 已复制置顶大盘指数与期货汇总包！");
         }
 
-        // -------------------- 4.7 双时区战略时钟 --------------------
         function updateClocks() {
             const now = new Date();
             document.getElementById('bj-time').innerText = now.toLocaleTimeString('zh-CN', { timeZone: 'Asia/Shanghai', hour12: false });
@@ -1298,10 +1228,13 @@
             }
         }
 
-        initBaselineQuotes();
+        // 启动执行：优先保证当前主图 K 线 100% 真实加载，再后台步进同步其余股票
+        initPlaceholders();
         initLightweightChart();
         renderAllCards();
-        refreshLiveAll();
+        loadSymbolChartAndLevels('SOXL', '1d').then(() => {
+            startBackgroundQueueSync();
+        });
         setInterval(updateClocks, 1000);
         updateClocks();
     </script>
