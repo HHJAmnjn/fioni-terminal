@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-菲欧尼之心 · 云端数据全量同步引擎
-职责：定时抓取全市场最新真实行情，解算支撑/压力/技术性成交密集区，导出 fioni_data.json 供前端秒级读取
+菲欧尼之心 · 云端数据全量同步引擎 (v4.0 含 SPX / VOO / NQMAIN 2612 期货主连)
 """
 import os
 import json
@@ -19,19 +18,14 @@ _FACTOR_Y_REAL = base64.b64decode("U1BMVg==").decode("utf-8")
 
 SECTOR_CONFIG = {
     "👑 置顶3X多空": ['SOXL', 'SOXS', 'TQQQ', 'SQQQ'],
-    "⚡ 第二梯队重点池": ['SPY', 'MRVL', 'LITE', 'BE', 'SOXL', 'TQQQ', 'MRNA', 'PLTR', 'MSFT', 'NOW', 'COHR', 'AXTI', 'CRCL', 'SPCX', 'NBIS'],
-    "💾 第三梯队芯片存储": ['SOXX', 'NVDA', 'AVGO', 'TSM', 'ASML', 'AMD', 'ARM', 'INTC', 'MU', 'STX', 'WDC', 'SNDK'],
-    "☁️ 第四梯队科技加密": ['QQQ', 'BTC-USD', 'MSTR', 'AAPL', 'GOOG', 'AMZN', 'META', 'TSLA', 'ORCL', 'DELL', 'CRWV', 'ALAB'],
-    "🛡️ 第五梯队因子Y防御": [_FACTOR_Y_REAL, 'KO', 'SCHD', 'GLD', 'GDX', 'VST', 'NLR']
+    "🌐 置顶大盘与期货": ['SOXX', 'QQQ', 'SPY', '^GSPC', 'VOO', 'NQZ26.CME'],
+    "⚡ 核心高弹性池": ['SPY', 'VOO', '^GSPC', 'NQZ26.CME', 'MRVL', 'LITE', 'BE', 'SOXL', 'TQQQ', 'MRNA', 'PLTR', 'MSFT', 'NOW', 'COHR', 'AXTI', 'CRCL', 'SPCX', 'NBIS'],
+    "💾 芯片与存储硬件": ['SOXX', 'NVDA', 'AVGO', 'TSM', 'ASML', 'AMD', 'ARM', 'INTC', 'MU', 'STX', 'WDC', 'SNDK'],
+    "☁️ 科技巨头与加密": ['QQQ', 'BTC-USD', 'MSTR', 'AAPL', 'GOOG', 'AMZN', 'META', 'TSLA', 'ORCL', 'DELL', 'CRWV', 'ALAB'],
+    "🛡️ 因子Y与宏观防御": [_FACTOR_Y_REAL, 'KO', 'SCHD', 'GLD', 'GDX', 'VST', 'NLR']
 }
 
 ALL_TICKERS = list(dict.fromkeys([s for group in SECTOR_CONFIG.values() for s in group]))
-
-DISPLAY_NAMES = {
-    _FACTOR_Y_REAL: "Y",
-    "BTC-USD": "BTC",
-    "STX": "STX(希捷)"
-}
 
 def compute_rsi(series: pd.Series, period: int = 14) -> float:
     if len(series) < period + 1:
@@ -49,7 +43,6 @@ def calculate_fioni_levels(df_1h: pd.DataFrame, sym: str) -> dict:
     spot = float(sub['close'].iloc[-1])
     rsi = compute_rsi(sub['close'], 14)
 
-    # 近20根与布林轨
     recent20 = sub.tail(20)
     mean20 = float(recent20['close'].mean())
     std20 = float(recent20['close'].std())
@@ -60,7 +53,6 @@ def calculate_fioni_levels(df_1h: pd.DataFrame, sym: str) -> dict:
     swing_low = float(recent20['low'].min())
     swing_high = float(recent20['high'].max())
 
-    # 24档量价分布解算 (POC / VAL / VAH)
     low_min = float(sub['low'].min())
     high_max = float(sub['high'].max())
     bins = 24
@@ -72,7 +64,7 @@ def calculate_fioni_levels(df_1h: pd.DataFrame, sym: str) -> dict:
     v_arr = sub['volume'].values
     idx = np.clip(np.digitize(typ, edges) - 1, 0, bins - 1)
     for i, v in zip(idx, v_arr):
-        vols[i] += float(v)
+        vols[i] += float(v) if v > 0 else 1.0  # 兼容 SPX 指数无成交量时按等权价格分布计算
 
     poc_idx = int(np.argmax(vols))
     tot_vol = vols.sum() if vols.sum() > 0 else 1.0
@@ -122,16 +114,19 @@ def calculate_fioni_levels(df_1h: pd.DataFrame, sym: str) -> dict:
     }
 
 def fetch_single_ticker(sym: str):
-    try:
-        tk = yf.Ticker(sym)
-        df_1h = tk.history(period="1mo", interval="1h")
-        if df_1h is None or df_1h.empty or len(df_1h) < 15:
-            return None
-        df_1h.columns = [str(c).lower() for c in df_1h.columns]
-        levels = calculate_fioni_levels(df_1h, sym)
-        return sym, levels
-    except Exception:
-        return None
+    # 若为纳指100期货主连2612，优先抓取 NQZ26.CME，若数据源需要连续合约名则自动回退 NQ=F
+    candidates = ['NQZ26.CME', 'NQ=F'] if sym == 'NQZ26.CME' else [sym]
+    for query_sym in candidates:
+        try:
+            tk = yf.Ticker(query_sym)
+            df_1h = tk.history(period="1mo", interval="1h")
+            if df_1h is not None and not df_1h.empty and len(df_1h) >= 15:
+                df_1h.columns = [str(c).lower() for c in df_1h.columns]
+                levels = calculate_fioni_levels(df_1h, sym)
+                return sym, levels
+        except Exception:
+            continue
+    return None
 
 def main():
     bj_time = (datetime.now(timezone.utc) + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M:%S")
@@ -148,7 +143,6 @@ def main():
 
     print(f"[+] 成功抓取并解算 {len(quotes)}/{len(ALL_TICKERS)} 支标的真实数据")
 
-    # 导出为前端直接读取的 JSON
     export_payload = {
         "updated_at": bj_time,
         "quotes": quotes
